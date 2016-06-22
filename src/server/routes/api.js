@@ -8,9 +8,63 @@ var listOfDocs = require('../utils/listOfDocs');
 router.get('/api/athena', function(req, res) {
   res.sendFile(path.join(__dirname, '../../../build/libs/athena.js'));
 });
+
+// creates an annotation for a given Doc and User
 router.post('/api/create', function(req, res) {
-  console.log(req.body);
-  res.end();
+  models.Doc.findOrCreate({
+    where: { url: req.body.target.source },
+    raw: true
+  }).then(function(doc) {
+    models.Annotation.create({
+      UserId: Number(req.body.creator),
+      DocId: Number(doc[0].id),
+      url: req.body.id,
+      text: req.body.body.text,
+      source: req.body.target.source,
+      exact: req.body.target.selector.exact,
+      prefix: req.body.target.selector.prefix,
+      suffix: req.body.target.selector.suffix
+    }).then(function(note) {
+      models.Annotation.findAll({
+        include: [{
+          model: models.User
+        }],
+        where: { id: note.dataValues.id }
+      }).then(function(annotation) {
+        annotationConstructor(annotation, res);
+      }).catch(function(err) {
+        res.send(err);
+      });
+    }).catch(function(err) {
+      res.send(err);
+    });
+  }).catch(function(err) {
+    res.send(err);
+  });
+});
+
+// updates an annotation
+router.put('/api/annotations', function(req, res) {
+  models.Annotation.update({
+    exact: req.body.target.selector.exact,
+    prefix: req.body.target.selector.prefix,
+    suffix: req.body.target.selector.suffix,
+    text: req.body.body.text
+  }, {
+    where: { url: req.body.id },
+    returning: true
+  }).then(function(annotations) {
+    models.Annotation.findAll({
+      include: [{
+        model: models.User
+      }],
+      where: { url: annotations[1][0].dataValues.url }
+    }).then(function(annotation) {
+      annotationConstructor(annotation, res);
+    });
+  }).catch(function(err) {
+    res.send(err);
+  });
 });
 
 // finds or creates User
@@ -30,39 +84,10 @@ router.put('/api/users', function(req, res) {
     name: req.body.name,
     title: req.body.title
   }, {
-    where: { facebookId: req.body.facebookId },
+    where: { id: req.body.id },
     returning: true
   }).then(function(users) {
     res.send(users[1]);
-  }).catch(function(err) {
-    res.send(err);
-  });
-});
-
-// finds or creates Doc
-router.post('/api/docs', function(req, res) {
-  models.Doc.findOrCreate({
-    where: { url: req.body.url, title: req.body.title }
-  }).then(function(doc) {
-    res.json(doc[0]);
-  }).catch(function(err) {
-    res.send(err);
-  });
-});
-
-// creates Annotation
-router.post('/api/annotations', function(req, res) {
-  models.Annotation.create({
-    UserId: Number(req.body.UserId),
-    DocId: Number(req.body.DocId),
-    url: req.body.url,
-    text: req.body.text,
-    source: req.body.source,
-    exact: req.body.exact,
-    prefix: req.body.prefix,
-    suffix: req.body.suffix
-  }).then(function(annotation) {
-    res.send(annotation);
   }).catch(function(err) {
     res.send(err);
   });
@@ -120,3 +145,33 @@ router.get('/api/docs', function(req, res) {
 });
 
 module.exports = router;
+
+// // finds or creates Doc
+// router.post('/api/docs', function(req, res) {
+//   models.Doc.findOrCreate({
+//     where: { url: req.body.url, title: req.body.title }
+//   }).then(function(doc) {
+//     res.json(doc[0]);
+//   }).catch(function(err) {
+//     res.send(err);
+//   });
+// });
+
+// // creates Annotation
+// router.post('/api/annotations', function(req, res) {
+//   models.Annotation.create({
+//     UserId: Number(req.body.UserId),
+//     DocId: Number(req.body.DocId),
+//     url: req.body.url,
+//     text: req.body.text,
+//     source: req.body.source,
+//     exact: req.body.exact,
+//     prefix: req.body.prefix,
+//     suffix: req.body.suffix
+//   }).then(function(annotation) {
+//     res.send(annotation);
+//   }).catch(function(err) {
+//     res.send(err);
+//   });
+// });
+

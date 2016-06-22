@@ -11,7 +11,7 @@ module.exports = function(array, res) {
       title: item.User.title
     };
     obj.body = {
-      lastModified: item.lastModified,
+      lastModified: item.updatedAt,
       text: item.text
     };
     obj.target = {

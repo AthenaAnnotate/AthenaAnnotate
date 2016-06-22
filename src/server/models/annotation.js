@@ -1,20 +1,20 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var Annotation = sequelize.define('Annotation', {
-    id: {
-      type: DataTypes.INTEGER,
-      unique: true,
-      primaryKey: true
-    },
-    annotation: DataTypes.JSON,
-    userId: DataTypes.INTEGER,
-    docId: DataTypes.INTEGER
+    url: DataTypes.TEXT,
+    text: DataTypes.TEXT,
+    source: DataTypes.TEXT,
+    exact: DataTypes.TEXT,
+    prefix: DataTypes.TEXT,
+    suffix: DataTypes.TEXT,
+    UserId: DataTypes.INTEGER,
+    DocId: DataTypes.INTEGER
   }, {
     classMethods: {
       associate: function(models) {
-        // associations can be defined here
-        Annotation.belongsTo(models.Doc);
         Annotation.belongsTo(models.User);
+        Annotation.belongsTo(models.Doc);
+        // associations can be defined here
       }
     }
   });

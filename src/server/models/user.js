@@ -1,12 +1,12 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var User = sequelize.define('User', {
-    id: {
-      type: DataTypes.INTEGER,
-      unique: true,
-      primaryKey: true
-    },
-    name: DataTypes.STRING
+    title: DataTypes.STRING,
+    name: DataTypes.STRING,
+    facebookId: {
+      type: DataTypes.STRING,
+      unique: true
+    }
   }, {
     classMethods: {
       associate: function(models) {

@@ -12,7 +12,9 @@
     "watch-athena": "npm run build-athena -- --watch",
     "start": "node src/server/server.js",
     "test": "",
-    "lint": "eslint src --color"
+    "lint": "eslint src --color",
+    "drop": "dropdb -U postgres annotate",
+    "create": "createdb -U postgres annotate && node_modules/.bin/sequelize db:migrate"
   },
   "repository": {
     "type": "git",

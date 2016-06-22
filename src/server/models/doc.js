@@ -1,14 +1,10 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var Doc = sequelize.define('Doc', {
-    id: {
-      type: DataTypes.INTEGER,
-      unique: true,
-      primaryKey: true
-    },
-    title: DataTypes.STRING,
+    image: DataTypes.TEXT,
+    title: DataTypes.TEXT,
     url: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       unique: true
     }
   }, {
