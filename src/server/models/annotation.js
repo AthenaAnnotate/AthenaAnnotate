@@ -12,9 +12,9 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     classMethods: {
       associate: function(models) {
+        // associations can be defined here
         Annotation.belongsTo(models.User);
         Annotation.belongsTo(models.Doc);
-        // associations can be defined here
       }
     }
   });
