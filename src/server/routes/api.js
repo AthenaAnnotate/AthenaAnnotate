@@ -115,15 +115,11 @@ router.put('/api/users', function(req, res) {
 // WEB APP - loads all Annotations for a given User
 router.get('/api/annotations', function(req, res) {
   models.Annotation.findAll({
-    // include: [{
-    //   model: models.User
-    // }],
     where: {
       UserId: req.query.UserId
     }
   }).then(function(annotations) {
     res.send(annotations);
-    // annotationConstructor(annotations, res);
   }).catch(function(err) {
     res.send(err);
   });
@@ -146,33 +142,3 @@ router.get('/api/docs', function(req, res) {
 });
 
 module.exports = router;
-
-// // finds or creates Doc
-// router.post('/api/docs', function(req, res) {
-//   models.Doc.findOrCreate({
-//     where: { url: req.body.url, title: req.body.title }
-//   }).then(function(doc) {
-//     res.json(doc[0]);
-//   }).catch(function(err) {
-//     res.send(err);
-//   });
-// });
-
-// // creates Annotation
-// router.post('/api/annotations', function(req, res) {
-//   models.Annotation.create({
-//     UserId: Number(req.body.UserId),
-//     DocId: Number(req.body.DocId),
-//     url: req.body.url,
-//     text: req.body.text,
-//     source: req.body.source,
-//     exact: req.body.exact,
-//     prefix: req.body.prefix,
-//     suffix: req.body.suffix
-//   }).then(function(annotation) {
-//     res.send(annotation);
-//   }).catch(function(err) {
-//     res.send(err);
-//   });
-// });
-
