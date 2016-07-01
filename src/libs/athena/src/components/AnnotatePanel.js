@@ -16,7 +16,7 @@ class AnnotatePanel extends Component {
   }
 
   render () {
-    const { close, submit, del, annotation, actions } = this.props;
+    const { close, submit, del, widget, annotation, actions } = this.props;
     const { exact } = annotation.target.selector;
 
     return (
@@ -48,6 +48,7 @@ class AnnotatePanel extends Component {
 
 AnnotatePanel.propTypes = {
   user: PropTypes.object,
+  widget: PropTypes.object,
   actions: PropTypes.object,
   annotation: PropTypes.object,
   annotations: PropTypes.array,

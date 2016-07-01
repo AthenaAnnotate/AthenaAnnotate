@@ -86,15 +86,11 @@ export const wrapAnnote = (range, annoteId, cb) => {
 };
 
 export const unwrapAnnote = (annoteId) => {
-  // target node
   const node = document.querySelector(`[data-id='${annoteId}']`);
   const { parentNode, nextSibling } = node;
-  // get node's content
   const content = node.textContent;
   const textNode = document.createTextNode(content);
-  // remove node
   parentNode.removeChild(node);
-  // nextNode.insertBefore(content)
   parentNode.insertBefore(textNode, nextSibling);
 };
 

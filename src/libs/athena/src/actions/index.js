@@ -65,6 +65,11 @@ export const logout = () => (
   )
 );
 
+export const setModify = (bool) => ({
+  type: types.SET_WIDGET_MODIFY,
+  isOnModify: bool,
+});
+
 // Updates state.annotations.body.text to given value
 export const updateBody = (text) => ({
   type: types.UPDATE_BODY,

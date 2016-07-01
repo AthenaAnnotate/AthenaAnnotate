@@ -79,7 +79,8 @@ class App extends Component {
   }
 
   createAnnote(annote) {
-    const { actions: { setAnnote } } = this.props;
+    const { actions: { setAnnote, setModify } } = this.props;
+    setModify(false);
     setAnnote(annote); // set annotation
   }
 
@@ -122,14 +123,18 @@ class App extends Component {
   }
 
   displayAnnote(annoteId) {
-    const { annotations, actions: { setAnnote } } = this.props;
-    console.log('annotes: ', annotations);
+    const { annotations, actions: { setAnnote, setModify } } = this.props;
     const annote = annotations.filter(annotation => (
         annotation.id === annoteId
       )
     );
-    console.log('display annote: ', annote[0]);
-    setAnnote(annote[0]);
+    if (!!annote) {
+      setModify(true);
+      setAnnote(annote[0]);
+      return annote;
+    }
+    // TODO: handle error in which no annotation was fetched
+    return null;
   }
 
   // take action on events we know about
@@ -175,6 +180,7 @@ class App extends Component {
 
 App.propTypes = {
   user: PropTypes.object,
+  widget: PropTypes.object,
   annotation: PropTypes.object,
   annotations: PropTypes.array,
   actions: PropTypes.object,

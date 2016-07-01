@@ -32,8 +32,13 @@ class App extends Component {
 
     this.state = {
       controls: HIDE_CONTROL_BUTTONS_CLASS,
+      pos: {
+        top: 0,
+        left: 0,
+      },
     };
 
+    this.setController = this.setController.bind(this);
     this.deleteAnnote = this.deleteAnnote.bind(this);
     this.shortcutHandler = this.shortcutHandler.bind(this);
     this.setUser = this.setUser.bind(this);
@@ -53,7 +58,7 @@ class App extends Component {
   componentDidMount() {
     window.addEventListener('message', this.handleMessageEvent);
     window.addEventListener('keydown', e => { this.shortcutHandler(e); });
-    window.addEventListener('mouseup', this.handleSelectionEvent);
+    window.addEventListener('mouseup', e => { this.handleSelectionEvent(e); });
   }
 
   componentWillUnmount() {
@@ -104,7 +109,7 @@ class App extends Component {
     return user && user.id;
   }
 
-  handleSelectionEvent() {
+  handleSelectionEvent(e) {
     const range = window.getSelection().getRangeAt(0);
     const distance = Math.abs(
       range.endOffset - range.startOffset
@@ -112,7 +117,7 @@ class App extends Component {
     const display = this.state.controller;
     // IF a selection is made on mouseup
     if (distance > 0) {
-      this.setState({ controls: SHOW_CONTROL_BUTTONS_CLASS });
+      this.setController(e);
       this.hasSelection = true;
     } else {
       const classList = this.props.iframe.classList;
@@ -124,6 +129,19 @@ class App extends Component {
       }
       this.hasSelection = false;
     }
+  }
+
+  setController(e) {
+    const top = `${window.scrollY}${e.clientY}px`;
+    const left = `${window.scrollX + e.srcElement.getBoundingClientRect().left +
+    e.srcElement.clientWidth}px`;
+    return this.setState({
+      controls: SHOW_CONTROL_BUTTONS_CLASS,
+      pos: {
+        top,
+        left,
+      },
+    });
   }
 
   shortcutHandler(e) {
@@ -236,16 +254,22 @@ class App extends Component {
   }
 
   render() {
+    const controllerPos = {
+      top: this.state.pos.top,
+      left: this.state.pos.left,
+    };
+
+
     return (
-      <div className={this.state.controls}>
+      <div className={this.state.controls} style={controllerPos}>
         <div>
           <ControlButton
             handler={() => { this.initNote(); }}
-            label={'Annotate!'}
+            label={'A'}
           />
           <ControlButton
             handler={() => { this.createHighlight(); }}
-            label={'Highlight!'}
+            label={'H'}
           />
         </div>
       </div>

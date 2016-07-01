@@ -13,7 +13,7 @@ export const HIDE_ANNOTATE_PANEL = 'HIDE_ANNOTATE_PANEL';
 
 // widget
 export const SET_WIDGET = 'SET_WIDGET';
-
+export const SET_WIDGET_MODIFY = 'SET_WIDGET_MODIFY';
 // annotation
 export const SET_ANNOTATION = 'SET_ANNOTATION';
 export const CLEAR_ANNOTATION = 'CLEAR_ANNOTATION';
