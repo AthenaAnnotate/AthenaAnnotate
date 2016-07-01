@@ -3,8 +3,11 @@ class Annote extends HTMLElement {
     // styling
     this.style.backgroundColor = 'yellow';
   }
-  addListener (cb) {
+  addListener(cb) {
     this.addEventListener('click', cb);
+  }
+  addDataProp(prop, value) {
+    this.dataset[prop] = value;
   }
 }
 

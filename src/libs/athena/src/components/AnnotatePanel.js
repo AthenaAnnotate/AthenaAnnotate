@@ -16,7 +16,7 @@ class AnnotatePanel extends Component {
   }
 
   render () {
-    const { close, submitHandler, annotation, actions } = this.props;
+    const { close, submit, del, annotation, actions } = this.props;
     const { exact } = annotation.target.selector;
 
     return (
@@ -38,10 +38,8 @@ class AnnotatePanel extends Component {
             />
           </FormGroup>
         </form>
-        <Button
-          bsStyle="primary"
-          onClick={submitHandler}
-        > Submit </Button>
+        <Button bsStyle="primary" onClick={submit}> Submit </Button>
+        <div onClick={del}>delete</div>
         <FacebookLogout logout={actions.logout} />
       </div>
     );
@@ -54,7 +52,8 @@ AnnotatePanel.propTypes = {
   annotation: PropTypes.object,
   annotations: PropTypes.array,
   close: PropTypes.func.isRequired,
-  submitHandler: PropTypes.func.isRequired,
+  submit: PropTypes.func.isRequired,
+  del: PropTypes.func.isRequired,
   // exact: PropTypes.string.isRequired,
 };
 

@@ -11,6 +11,7 @@ import {
   SEND_USER,
   SEND_ANNOTES,
   MODIFY_BODY,
+  DELETE_ANNOTE,
   DISPLAY_ANNOTE,
 } from '../../../common/messageTypes';
 
@@ -21,8 +22,8 @@ import {
   SHOW_CONTROL_BUTTONS_CLASS,
 } from '../constants';
 
-import { wrapAnnote, retrieveAnnote } from '../engine/';
-import { saveAnnote, fetchUser, fetchAnnotes } from '../utils/fetches';
+import { wrapAnnote, unwrapAnnote, retrieveAnnote } from '../engine/';
+import { saveAnnote, fetchUser, fetchAnnotes, fetchDelete } from '../utils/fetches';
 import { getText, createAnnote } from '../utils/utils';
 
 class App extends Component {
@@ -32,6 +33,8 @@ class App extends Component {
     this.state = {
       controls: HIDE_CONTROL_BUTTONS_CLASS,
     };
+
+    this.deleteAnnote = this.deleteAnnote.bind(this);
     this.shortcutHandler = this.shortcutHandler.bind(this);
     this.setUser = this.setUser.bind(this);
     this.initNote = this.initNote.bind(this);
@@ -162,6 +165,8 @@ class App extends Component {
         return this.initialLoad(event.data.user);
       case MODIFY_BODY:
         return this.createNote(event.data.body);
+      case   DELETE_ANNOTE:
+        return this.deleteAnnote(event.data.annoteId);
       default:
         return null;// noop , need to return some value
     }
@@ -190,7 +195,7 @@ class App extends Component {
       const annote = createAnnote(selector, this.annoteId, this.user.id);
       this.annote = annote;
       this.postMessageToFrame({ type: CREATE_ANNOTE, annote });
-      wrapAnnote(range, () => {
+      wrapAnnote(range, annote.id, () => {
         this.postMessageToFrame({ type: DISPLAY_ANNOTE, annoteId: annote.id });
         this.showAthena();
       });
@@ -214,15 +219,20 @@ class App extends Component {
       const annote = createAnnote(selector, this.annoteId, this.user.id);
       saveAnnote(annote); // POST annote to server to be stored in db
       this.postMessageToFrame({ type: ADD_ANNOTE, annote });
-      wrapAnnote(range, () => {
+      wrapAnnote(range, annote.id, () => {
         this.postMessageToFrame({ type: DISPLAY_ANNOTE, annoteId: annote.id });
         this.showAthena();
       });
-      // TODO: update state.annotations in Athena
       this.annoteId++; // TODO: move into createAnnote
     } else {
       this.showAthena();
     }
+  }
+
+  deleteAnnote(annoteId) {
+    // make DELETE request to api/annotations
+    fetchDelete(annoteId);
+    unwrapAnnote(annoteId);
   }
 
   render() {

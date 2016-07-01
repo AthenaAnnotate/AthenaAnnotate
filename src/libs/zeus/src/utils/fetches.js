@@ -37,3 +37,10 @@ export const fetchAnnotes = (user) => {
   return fetch(query)
     .then(res => res.json());
 };
+
+export const fetchDelete = (annoteId) => {
+  const query = `${baseUrl}/api/annotations?id=${annoteId}`;
+  // const query = options.API_DELETE + annoteId;
+
+  return fetch(query, { method: 'DELETE' }).then(checkStatus);
+};

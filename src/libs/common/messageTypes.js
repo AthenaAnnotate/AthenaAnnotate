@@ -13,6 +13,7 @@ export const SEND_USER = 'SEND_USER';
 
 export const SEND_ANNOTES = 'SEND_ANNOTES';
 export const MODIFY_BODY = 'MODIFY_BODY';
+export const DELETE_ANNOTE = 'DELETE_ANNOTE';
 export const ADD_ANNOTE = 'ADD_ANNOTE';
 export const DISPLAY_ANNOTE = 'DISPLAY_ANNOTE';
 

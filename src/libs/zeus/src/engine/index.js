@@ -76,12 +76,26 @@ export const parseDoc = doc => {
   };
 };
 
-export const wrapAnnote = (range, cb) => {
+export const wrapAnnote = (range, annoteId, cb) => {
   const athena = new Athena;
   athena.addListener(cb);
+  athena.addDataProp('id', annoteId);
   range.surroundContents(athena);
-  // TODO: range.detach()
+  range.detach();
   return range;
+};
+
+export const unwrapAnnote = (annoteId) => {
+  // target node
+  const node = document.querySelector(`[data-id='${annoteId}']`);
+  const { parentNode, nextSibling } = node;
+  // get node's content
+  const content = node.textContent;
+  const textNode = document.createTextNode(content);
+  // remove node
+  parentNode.removeChild(node);
+  // nextNode.insertBefore(content)
+  parentNode.insertBefore(textNode, nextSibling);
 };
 
 export const createRange = (startNode, endNode) => {
@@ -166,7 +180,7 @@ export function retrieveAnnote(doc, annote, cb) {
   if (!!annoteLocation) {
     const { startNode, endNode } = annoteLocation;
     const range = createRange(startNode, endNode);
-    wrapAnnote(range, cb);
+    wrapAnnote(range, annote.id, cb);
     return range;
     // return insertAnnote(startNode, endNode, cb);
   }

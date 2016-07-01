@@ -13,6 +13,7 @@ import {
   SEND_USER,
   SEND_ANNOTES,
   MODIFY_BODY,
+  DELETE_ANNOTE,
   DISPLAY_ANNOTE,
 } from '../../../common/messageTypes';
 
@@ -28,6 +29,7 @@ class App extends Component {
 
     this.loginHandler = this.loginHandler.bind(this);
     this.submitHandler = this.submitHandler.bind(this);
+    this.deleteHandler = this.deleteHandler.bind(this);
     this.displayAnnote = this.displayAnnote.bind(this);
     this.sendUser = this.sendUser.bind(this);
     this.hideFrame = this.hideFrame.bind(this);
@@ -113,12 +115,20 @@ class App extends Component {
     });
   }
 
+  deleteHandler() {
+    const { annotation: { id } } = this.props;
+    console.log('id: ', id);
+    this.postMessageToParent({ type: DELETE_ANNOTE, annoteId: id });
+  }
+
   displayAnnote(annoteId) {
     const { annotations, actions: { setAnnote } } = this.props;
+    console.log('annotes: ', annotations);
     const annote = annotations.filter(annotation => (
         annotation.id === annoteId
       )
     );
+    console.log('display annote: ', annote[0]);
     setAnnote(annote[0]);
   }
 
@@ -155,7 +165,7 @@ class App extends Component {
       <div>
         {
           this.isUserLoggedIn()
-            ? <AnnotatePanel close={this.hideFrame} submitHandler={this.submitHandler} />
+            ? <AnnotatePanel close={this.hideFrame} del={this.deleteHandler} submit={this.submitHandler} />
             : <AuthPanel login={this.loginHandler} close={this.hideFrame} />
         }
       </div>
