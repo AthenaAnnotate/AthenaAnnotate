@@ -132,7 +132,7 @@ class App extends Component {
   }
 
   setController(e) {
-    const top = `${window.scrollY}${e.clientY}px`;
+    const top = `${window.scrollY + e.clientY}px`;
     const left = `${window.scrollX + e.srcElement.getBoundingClientRect().left +
     e.srcElement.clientWidth}px`;
     return this.setState({
@@ -257,6 +257,7 @@ class App extends Component {
     const controllerPos = {
       top: this.state.pos.top,
       left: this.state.pos.left,
+      zIndex: 999999,
     };
 
 
