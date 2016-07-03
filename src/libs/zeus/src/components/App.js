@@ -257,7 +257,6 @@ class App extends Component {
     const controllerPos = {
       top: this.state.pos.top,
       left: this.state.pos.left,
-      zIndex: 999999,
     };
 
 

@@ -76,22 +76,64 @@ export const parseDoc = doc => {
   };
 };
 
-export const wrapAnnote = (range, annoteId, cb) => {
-  const athena = new Athena;
-  athena.addListener(cb);
-  athena.addDataProp('id', annoteId);
-  range.surroundContents(athena);
-  range.detach();
-  return range;
+Range.prototype.canSurroundContents = function() {
+  return this.startContainer.parentElement === this.endContainer.parentElement;
 };
 
-export const unwrapAnnote = (annoteId) => {
-  const node = document.querySelector(`[data-id='${annoteId}']`);
-  const { parentNode, nextSibling } = node;
-  const content = node.textContent;
-  const textNode = document.createTextNode(content);
-  parentNode.removeChild(node);
-  parentNode.insertBefore(textNode, nextSibling);
+
+// return an array of ranges to be wrapped
+const getNextNode = n => {
+  let node = n;
+  if (!!node.childNodes.length) {
+    return node.firstChild;
+  }
+
+  while (!!node && !node.nextSibling) {
+    node = node.parentNode;
+  }
+
+  if (!node) {
+    return null;
+  }
+
+  return node.nextSibling;
+};
+
+const getRangeNodes = range => { // TODO: add filter arg
+  let node = range.startContainer;
+  const endNode = range.endContainer;
+  const nodes = [];
+  if (node === endNode) {
+    return node;
+  }
+
+  while (!!node && node !== endNode) {
+    nodes.push(node);
+    node = getNextNode(node);
+  }
+  nodes.push(endNode);
+
+  return nodes;
+};
+
+const sortNodesBy = (nodes, prop) => {
+  const ref = new Map();
+  const sorted = {};
+  let sortedBy;
+  let key;
+
+  nodes.forEach(node => {
+    sortedBy = node[prop];
+    if (ref.has(sortedBy)) {
+      key = ref.get(sortedBy);
+      sorted[key].push(node);
+    } else {
+      key = ref.size;
+      ref.set(sortedBy, key);
+      sorted[key] = [node];
+    }
+  });
+  return { ref, sorted };
 };
 
 export const createRange = (startNode, endNode) => {
@@ -103,6 +145,66 @@ export const createRange = (startNode, endNode) => {
   range.setEnd(endNode.textNode, endOffset);
 
   return range;
+};
+
+export const wrapAnnote = (range, annoteId, cb) => {
+  let athena = new Athena;
+  athena.addListener(cb);
+  athena.addDataProp('id', annoteId);
+
+  // if canSurroundContents
+  if (range.canSurroundContents()) {
+    range.surroundContents(athena);
+    range.detach();
+    return range;
+  }
+  // else, make new ranges and wrap them individually
+  let newRange;
+  let startNode;
+  let endNode;
+  const ranges = [];
+  const textNodes = getRangeNodes(range).filter(node => node.nodeType === 3);
+  const { sorted } = sortNodesBy(textNodes, 'parentNode');
+
+  Object.keys(sorted).reduce((result, key) => {
+    result.push(sorted[key]);
+    return result;
+  }, [])
+  .forEach((nodes, idx, collection) => {
+    athena = new Athena;
+    athena.addListener(cb);
+    athena.addDataProp('id', annoteId);
+    startNode = nodes[0];
+    endNode = nodes[nodes.length - 1];
+    if (idx === 0) { // handle first range
+      newRange = createRange(
+        { textNode: startNode, startOffset: range.startOffset },
+        { textNode: endNode, endOffset: endNode.textContent.length }
+      );
+    } else if (idx === collection.length - 1) { // handle last range
+      newRange = createRange(
+        { textNode: startNode, startOffset: 0 },
+        { textNode: endNode, endOffset: range.endOffset }
+      );
+    } else {
+      newRange = createRange(
+        { textNode: startNode, startOffset: 0 },
+        { textNode: endNode, endOffset: endNode.textContent.length }
+      );
+    }
+    newRange.surroundContents(athena);
+    ranges.push(newRange);
+  });
+  return ranges;
+};
+
+export const unwrapAnnote = (annoteId) => {
+  const node = document.querySelector(`[data-id='${annoteId}']`);
+  const { parentNode, nextSibling } = node;
+  const content = node.textContent;
+  const textNode = document.createTextNode(content);
+  parentNode.removeChild(node);
+  parentNode.insertBefore(textNode, nextSibling);
 };
 
 // returns range
@@ -129,7 +231,7 @@ export const locateAnnote = (annote, docText, nodes) => {
   const reg = new RegExp(regQuery, 'g');
   const match = reg.exec(docText);
   // IF match, find the match's corresponding node(s)
-  if (match) {
+  if (!!match) {
     const matchIdx = match.index;
     for (let i = 0; i < nodes.length; i++) {
       startNode = nodes[i];
@@ -159,10 +261,10 @@ export const locateAnnote = (annote, docText, nodes) => {
         // insertAnnote(startNode, endNode, selector.prefix, match);
       }
       // TODO: Handle case inwhich an annotation cannot be retrieved
-      console.log('no match');
-      return null;
     }
   }
+  console.log('no match');
+  return null;
 };
 
 // Returns Range of retrieved annotation or null
