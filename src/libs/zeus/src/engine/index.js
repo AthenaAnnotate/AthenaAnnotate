@@ -81,7 +81,8 @@ Range.prototype.canSurroundContents = function() {
 };
 
 
-// return an array of ranges to be wrapped
+// returns the next node,
+// either the next siblingNode or the siblingNode of a parentNode
 const getNextNode = n => {
   let node = n;
   if (!!node.childNodes.length) {
@@ -99,6 +100,7 @@ const getNextNode = n => {
   return node.nextSibling;
 };
 
+// returns all of the nodes within a given range
 const getRangeNodes = range => { // TODO: add filter arg
   let node = range.startContainer;
   const endNode = range.endContainer;
@@ -116,6 +118,10 @@ const getRangeNodes = range => { // TODO: add filter arg
   return nodes;
 };
 
+// sorts the given nodes by a given property
+// returns two collections
+// 1. sorted nodes (sorted)
+// 2. instances of the sorting properties (ref)
 const sortNodesBy = (nodes, prop) => {
   const ref = new Map();
   const sorted = {};
@@ -133,9 +139,10 @@ const sortNodesBy = (nodes, prop) => {
       sorted[key] = [node];
     }
   });
-  return { ref, sorted };
+  return { sorted, ref };
 };
 
+// creates a new range
 export const createRange = (startNode, endNode) => {
   const range = document.createRange();
   const { startOffset } = startNode;
@@ -147,18 +154,17 @@ export const createRange = (startNode, endNode) => {
   return range;
 };
 
-export const wrapAnnote = (range, annoteId, cb) => {
-  let athena = new Athena;
-  athena.addListener(cb);
+// creates the html element used for marking annotations
+const createAnnoteElement = (annoteId, cb) => {
+  const athena = new Athena;
   athena.addDataProp('id', annoteId);
+  athena.addListener(cb);
+  return athena;
+};
 
-  // if canSurroundContents
-  if (range.canSurroundContents()) {
-    range.surroundContents(athena);
-    range.detach();
-    return range;
-  }
-  // else, make new ranges and wrap them individually
+// creates and wraps a new range around each set of childNodes
+// within the given range
+const createSubRanges = (range, cb) => {
   let newRange;
   let startNode;
   let endNode;
@@ -171,9 +177,6 @@ export const wrapAnnote = (range, annoteId, cb) => {
     return result;
   }, [])
   .forEach((nodes, idx, collection) => {
-    athena = new Athena;
-    athena.addListener(cb);
-    athena.addDataProp('id', annoteId);
     startNode = nodes[0];
     endNode = nodes[nodes.length - 1];
     if (idx === 0) { // handle first range
@@ -192,10 +195,26 @@ export const wrapAnnote = (range, annoteId, cb) => {
         { textNode: endNode, endOffset: endNode.textContent.length }
       );
     }
-    newRange.surroundContents(athena);
+    cb(newRange);
     ranges.push(newRange);
   });
   return ranges;
+};
+
+export const wrapAnnote = (range, annoteId, cb) => {
+  // if canSurroundContents
+  if (range.canSurroundContents()) {
+    const athena = createAnnoteElement(annoteId, cb);
+    range.surroundContents(athena);
+    range.detach();
+    return range;
+  }
+  // else, make new ranges and wrap them individually
+  return createSubRanges(range, subRange => {
+    const athena = createAnnoteElement(annoteId, cb);
+    subRange.surroundContents(athena);
+    subRange.detach();
+  });
 };
 
 export const unwrapAnnote = (annoteId) => {
