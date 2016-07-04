@@ -5,6 +5,7 @@ import adder from './adder';
 import widget from './widget';
 import annotation from './annotation';
 import annotations from './annotations';
+import channels from './channels';
 
 export default combineReducers({
   user,
@@ -13,4 +14,5 @@ export default combineReducers({
   widget,
   annotation,
   annotations,
+  channels,
 });

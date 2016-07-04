@@ -265,7 +265,7 @@ class App extends Component {
         <div>
           <ControlButton
             handler={() => { this.initNote(); }}
-            label={'A'}
+            label={'N'}
           />
           <ControlButton
             handler={() => { this.createHighlight(); }}

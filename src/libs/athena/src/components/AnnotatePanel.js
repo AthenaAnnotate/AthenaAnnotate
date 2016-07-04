@@ -22,7 +22,6 @@ class AnnotatePanel extends Component {
     return (
       <div>
         <Button onClick={close}> Close </Button>
-        <h1> Annotate Panel </h1>
 
         <form>
           <FormGroup controlId="annoteFormId">
