@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-const Profile = ({ user, invites, exitProfile, acceptInvite, group, following, setGroup, setFilter, setUser }) => {
+const Profile = ({ user, profile, invites, exitProfile, acceptInvite, group, following, setGroup, setFilter, setUser, updateName, updateTitle, updateProfile }) => {
   const invitesList = invites.invites.map(invite => (
     <li key={invite.id}>
       <span>{invite.sentFrom} has invited you to join {invite.GroupId}.</span>
@@ -45,13 +45,22 @@ const Profile = ({ user, invites, exitProfile, acceptInvite, group, following, s
       <form className="profile">
         <div className="form-group">
           <label htmlFor="name">Name</label>
-          <input type="text" className="form-control" id="name" defaultValue={user.facebook.name} />
+          <input type="text" className="form-control" id="name" defaultValue={user.facebook.name} onChange={(e) => updateName(e.target.value)} />
         </div>
         <div className="form-group">
           <label htmlFor="title">Title</label>
-          <input type="text" className="form-control" id="title" defaultValue={user.title} />
+          <input type="text" className="form-control" id="title" defaultValue={user.title} onChange={(e) => updateTitle(e.target.value)} />
         </div>
-        <button type="submit" className="btn btn-default" onClick={(e) => { e.preventDefault(); }}>Save</button>
+        <button
+          type="submit"
+          className="btn btn-default"
+          onClick={(e) => {
+            e.preventDefault();
+            updateProfile(profile.name, profile.title, user.id);
+          }}
+        >
+          Save
+        </button>
         <button
           className="btn btn-default"
           onClick={(e) => {
@@ -64,7 +73,7 @@ const Profile = ({ user, invites, exitProfile, acceptInvite, group, following, s
       </form>
       <div>
         <div>
-          <h5>Pending Invitations</h5>
+          <h5>Pending Invitations:</h5>
           <ul>
             {invitesList}
           </ul>
@@ -89,6 +98,7 @@ const Profile = ({ user, invites, exitProfile, acceptInvite, group, following, s
 
 Profile.propTypes = {
   user: PropTypes.object.isRequired,
+  profile: PropTypes.object.isRequired,
   invites: PropTypes.object.isRequired,
   group: PropTypes.object.isRequired,
   following: PropTypes.object.isRequired,
@@ -97,6 +107,9 @@ Profile.propTypes = {
   setGroup: PropTypes.func.isRequired,
   setFilter: PropTypes.func.isRequired,
   setUser: PropTypes.func.isRequired,
+  updateName: PropTypes.func.isRequired,
+  updateTitle: PropTypes.func.isRequired,
+  updateProfile: PropTypes.func.isRequired,
 };
 
 export default Profile;

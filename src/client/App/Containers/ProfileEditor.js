@@ -4,7 +4,7 @@ import * as actions from '../Actions';
 
 const mapStatetoProps = (state) => (
   {
-    show: state.profile,
+    profile: state.profile,
     user: state.user,
     invites: state.invites,
     group: state.group,
@@ -28,6 +28,15 @@ const mapDispatchToProps = (dispatch) => (
     },
     setUser: (userId) => {
       dispatch(actions.setUser(userId));
+    },
+    updateName: (name) => {
+      dispatch(actions.updateName(name));
+    },
+    updateTitle: (title) => {
+      dispatch(actions.updateTitle(title));
+    },
+    updateProfile: (name, title, id) => {
+      dispatch(actions.updateProfile(name, title, id));
     },
   }
 );

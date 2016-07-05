@@ -88,8 +88,10 @@ var getTitle = function(doc, originalLink) {
       url: originalLink
     },
     returning: true
-  }).then(function(document) {
-    console.log(document);
+  }).then(function(entry) {
+    console.log(entry);
+  }).catch(function(error) {
+    console.log(error);
   });
 };
 

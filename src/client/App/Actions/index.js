@@ -1,6 +1,6 @@
 require('isomorphic-fetch');
 require('es6-promise').polyfill();
-
+import { saveUserToStore } from '../../../libs/athena/src/actions';
 export * from '../../../libs/athena/src/actions';
 
 // To load all annotations based on filter
@@ -524,4 +524,39 @@ export const inviteUsers = (otherUsersArray, groupId, userName) => (
       dispatch(clearSearch());
       console.log(response);
     })
+);
+
+export const updateTitle = (title) => (
+  {
+    type: 'UPDATE_TITLE',
+    title,
+  }
+);
+
+export const updateName = (name) => (
+  {
+    type: 'UPDATE_NAME',
+    name,
+  }
+);
+
+export const updateProfile = (name, title, id) => (
+  dispatch =>
+    fetch('http://localhost:3000/api/users', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name,
+        title,
+        id,
+      }),
+    })
+    .then(response => response.json())
+    .then(updatedProfile => {
+      console.log(updatedProfile);
+      dispatch(saveUserToStore(updatedProfile));
+    })
+    .catch(error => console.log(error))
 );

@@ -1,11 +1,21 @@
-const profile = (state = false, action) => {
+const profile = (state = { show: false }, action) => {
   switch (action.type) {
     case 'LOAD_PROFILE':
-      return true;
+      return Object.assign({}, state, {
+        show: true,
+      });
     case 'EXIT_PROFILE':
-      return false;
-    // case 'FILTER':
-    //   return false;
+      return Object.assign({}, state, {
+        show: false,
+      });
+    case 'UPDATE_NAME':
+      return Object.assign({}, state, {
+        name: action.name,
+      });
+    case 'UPDATE_TITLE':
+      return Object.assign({}, state, {
+        title: action.title,
+      });
     default:
       return state;
   }
