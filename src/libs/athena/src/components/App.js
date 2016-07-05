@@ -105,6 +105,10 @@ class App extends Component {
   }
 
   channelSelectHandler(channel) {
+    // change curChannel to channel
+    const { actions: { clearAnnote, setCurrentChannel } } = this.props;
+    clearAnnote();
+    setCurrentChannel(channel);
     this.postMessageToParent({ type: CHANGE_CHANNEL, channel });
   }
 

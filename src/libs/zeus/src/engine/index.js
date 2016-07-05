@@ -21,7 +21,7 @@ const getEndNode = (node, len) => {
   let curLen;
   let remLen = len - node.textNode.length;
   let curNode = node.textNode.nextSibling;
-  while (!!curNode) {
+  while (!!curNode && remLen > 0) {
     curLen = curNode.nodeType === 3 ?
       curNode.length :
       curNode.textContent.length;
@@ -37,7 +37,7 @@ const getEndNode = (node, len) => {
   }
   return {
     textNode: node.textNode,
-    endOffset: remLen,
+    endOffset: len,
   };
 };
 
@@ -252,7 +252,7 @@ export const locateAnnote = (annote, docText, nodes) => {
   const match = reg.exec(docText);
   // IF match, find the match's corresponding node(s)
   if (!!match) {
-    const matchIdx = match.index;
+    const matchIdx = match.index + selector.prefix.length;
     for (let i = 0; i < nodes.length; i++) {
       startNode = nodes[i];
       nodeLen = startNode.textNode.nodeValue.length;
@@ -267,7 +267,7 @@ export const locateAnnote = (annote, docText, nodes) => {
         }
 
         startNode.startOffset =
-        (matchIdx - startNode.start) + selector.prefix.length;
+        matchIdx - startNode.start; // + selector.prefix.length;
         // IF match spans multiple nodes find the endNode
         // ELSE, endNode is the same node as startNode
 
@@ -278,9 +278,7 @@ export const locateAnnote = (annote, docText, nodes) => {
           endOffset: startNode.startOffset + match[1].length,
         };
         return ({ startNode, endNode });
-        // insertAnnote(startNode, endNode, selector.prefix, match);
       }
-      // TODO: Handle case inwhich an annotation cannot be retrieved
     }
   }
   console.log('no match');

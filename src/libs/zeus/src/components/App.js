@@ -99,17 +99,13 @@ class App extends Component {
     fetchChannels(this.user.id)
     .then(channels => {
       console.log('getChannels: ', channels);
-      this.postMessageToFrame({
-        type: SEND_CHANNELS,
-        channels: {
-          current: {
-            id: this.user.id,
-            name: this.user.facebook.name,
-            type: 'user',
-          },
-          channels,
-        },
-      });
+      const user = {
+        id: this.user.id,
+        name: this.user.facebook.name,
+        type: 'user',
+      };
+      channels.push(user);
+      this.postMessageToFrame({ type: SEND_CHANNELS, channels: { current: user, channels } });
     });
   }
 
@@ -233,17 +229,39 @@ class App extends Component {
       // fetch group annotes for this doc
       fetchGroupAnnotes(channel.id)
       .then(annotes => {
-        console.log('annotes: ', annotes);
         document.querySelectorAll('athena-annote')
         .forEach(annote => {
           unwrapAnnote(annote);
         });
+
+        annotes.forEach(annote => {
+          retrieveAnnote(document.body, annote, () => {
+            this.postMessageToFrame({ type: DISPLAY_ANNOTE, annoteId: annote.id });
+            this.showAthena();
+          });
+        });
+
         this.postMessageToFrame({ type: SEND_ANNOTES, annotes });
       });
-      console.log(channel);
     } else if (channel.type === 'user') {
       // fetch user's annotes for this doc
-      console.log(channel);
+      console.log('new channel: ', channel);
+      fetchAnnotes(channel)
+      .then(annotes => {
+        document.querySelectorAll('athena-annote')
+        .forEach(annote => {
+          unwrapAnnote(annote);
+        });
+
+        annotes.forEach(annote => {
+          retrieveAnnote(document.body, annote, () => {
+            this.postMessageToFrame({ type: DISPLAY_ANNOTE, annoteId: annote.id });
+            this.showAthena();
+          });
+        });
+
+        this.postMessageToFrame({ type: SEND_ANNOTES, annotes });
+      });
     } else {
       // handle error
     }
