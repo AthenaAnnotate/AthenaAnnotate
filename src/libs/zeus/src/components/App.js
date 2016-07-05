@@ -98,7 +98,6 @@ class App extends Component {
   getChannels() {
     fetchChannels(this.user.id)
     .then(channels => {
-      console.log('getChannels: ', channels);
       const user = {
         id: this.user.id,
         name: this.user.facebook.name,
@@ -210,7 +209,7 @@ class App extends Component {
       case SEND_USER:
         return this.initialLoad(event.data.user);
       case MODIFY_BODY:
-        return this.createNote(event.data.body);
+        return this.createNote(event.data.data);
       case DELETE_ANNOTE:
         return this.deleteAnnote(event.data.annoteId);
       case CHANGE_CHANNEL:
@@ -227,8 +226,10 @@ class App extends Component {
   changeChannelHandler(channel) {
     if (channel.type === 'group') {
       // fetch group annotes for this doc
+      console.log('channel: ', channel);
       fetchGroupAnnotes(channel.id)
       .then(annotes => {
+        console.log('channel annotes: ', annotes);
         document.querySelectorAll('athena-annote')
         .forEach(annote => {
           unwrapAnnote(annote);
@@ -294,11 +295,14 @@ class App extends Component {
     }
   }
 
-  createNote(body) {
+  createNote(data) {
     // change body of this.annote
+    const { body, groupId } = data;
     this.annote = Object.assign({}, this.annote, {
       body,
+      groupId,
     });
+    console.log('this.annote: ', this.annote);
     saveAnnote(this.annote);
     this.hideAthena();
   }

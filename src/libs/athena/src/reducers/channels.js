@@ -21,7 +21,6 @@ const channels = (
         users: action.users,
       });
     case types.SET_CHANNELS:
-      console.log('in reducer: ', action.channels);
       return Object.assign({}, state, {
         current: action.channels.current,
         channels: action.channels.channels,

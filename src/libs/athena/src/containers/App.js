@@ -8,6 +8,7 @@ const mapStateToProps = (state) => ({
   widget: state.widget,
   annotation: state.annotation,
   annotations: state.annotations,
+  channels: state.channels,
   panel: state.panel,
 });
 

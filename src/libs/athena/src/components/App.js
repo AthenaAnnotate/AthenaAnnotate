@@ -113,9 +113,12 @@ class App extends Component {
   }
 
   submitHandler() {
-    const { actions: { addAnnote, clearAnnote }, annotation } = this.props;
-    const { body } = annotation;
-    this.postMessageToParent({ type: MODIFY_BODY, body });
+    const { actions: { addAnnote, clearAnnote }, annotation, channels } = this.props;
+    console.log('channels at submit: ', channels);
+    annotation.groupId = channels.current.type === 'group' ?
+      channels.current.id : null;
+    const { body, groupId } = annotation;
+    this.postMessageToParent({ type: MODIFY_BODY, data: { body, groupId } });
     addAnnote(annotation); // add annotation to annotations
     clearAnnote(); // rest annote to empty shape
   }
@@ -223,6 +226,7 @@ App.propTypes = {
   widget: PropTypes.object,
   annotation: PropTypes.object,
   annotations: PropTypes.array,
+  channels: PropTypes.object,
   actions: PropTypes.object,
 };
 

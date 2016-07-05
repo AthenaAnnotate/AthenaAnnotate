@@ -23,7 +23,7 @@ module.exports = function(array, res) {
       }
     };
     obj.private = item.private;
-    obj.group = item.groupId;
+    obj.groupId = item.groupId;
     result.push(obj);
   });
   res.send(result);

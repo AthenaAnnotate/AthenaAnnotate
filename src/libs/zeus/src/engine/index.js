@@ -17,14 +17,54 @@ const createRegQuery = selector => {
   return query;
 };
 
+const getTextNodes = node => (
+  document.createNodeIterator(
+    node,
+    NodeFilter.SHOW_TEXT,
+    textNode => (
+        textNode.parentElement.nodeName.toLowerCase() !== 'script' ?
+            NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT
+    )
+  )
+);
+
+
+// returns the next node,
+// either the next siblingNode or the siblingNode of a parentNode
+const getNextNode = (n, f) => {
+  const filter = f || (() => true);
+  let node = n;
+  do {
+    if (!!node.childNodes.length) {
+      return node.firstChild;
+    }
+
+    while (!!node && !node.nextSibling) {
+      node = node.parentNode;
+    }
+
+    if (!node) {
+      return null;
+    }
+    node = node.nextSibling;
+  } while (!filter(node));
+
+  return node; // .nextSibling;
+};
+
+
 const getEndNode = (node, len) => {
   let curLen;
-  let remLen = len - node.textNode.length;
-  let curNode = node.textNode.nextSibling;
+  let remLen = len - (node.textNode.length - node.startOffset);
+  let curNode = getNextNode(node.textNode, targetNode => targetNode.nodeType === 3);
+  // let nextNode = getNextNode(node.textNode);
+  // let curNode = nextNode.nodeType === 3 ?
+  //   nextNode : getTextNodes(nextNode).nextNode(); // .nextSibling;
   while (!!curNode && remLen > 0) {
-    curLen = curNode.nodeType === 3 ?
-      curNode.length :
-      curNode.textContent.length;
+    curLen = curNode.length;
+    // curLen = curNode.nodeType === 3 ?
+    //   curNode.length :
+    //   curNode.textContent.length;
 
     if (remLen - curLen <= 0) {
       return {
@@ -33,14 +73,18 @@ const getEndNode = (node, len) => {
       };
     }
     remLen -= curLen;
-    curNode = curNode.nextSibling;
+    curNode = getNextNode(curNode, targetNode => targetNode.nodeType === 3);
+    // nextNode = getNextNode(node.textNode);
+    // curNode = nextNode.nodeType === 3 ?
+    //   nextNode : getTextNodes(nextNode).nextNode(); // .nextSibling;
+
+    // curNode = getNextNode(curNode); // curNode.nextSibling;
   }
   return {
     textNode: node.textNode,
     endOffset: len,
   };
 };
-
 // returns a string docText that contains all
 // textNodes and an array of nodes that
 // correspond to each substring
@@ -78,26 +122,6 @@ export const parseDoc = doc => {
 
 Range.prototype.canSurroundContents = function() {
   return this.startContainer.parentElement === this.endContainer.parentElement;
-};
-
-
-// returns the next node,
-// either the next siblingNode or the siblingNode of a parentNode
-const getNextNode = n => {
-  let node = n;
-  if (!!node.childNodes.length) {
-    return node.firstChild;
-  }
-
-  while (!!node && !node.nextSibling) {
-    node = node.parentNode;
-  }
-
-  if (!node) {
-    return null;
-  }
-
-  return node.nextSibling;
 };
 
 // returns all of the nodes within a given range

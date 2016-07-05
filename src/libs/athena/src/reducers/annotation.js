@@ -14,6 +14,8 @@ const annotation = (
         suffix: '',
       },
     },
+    private: false,
+    groupId: null,
   },
   action
 ) => {
@@ -34,6 +36,8 @@ const annotation = (
             suffix: '',
           },
         },
+        private: false,
+        groupId: null,
       });
     case types.UPDATE_BODY:
       return Object.assign({}, state, {
@@ -45,6 +49,14 @@ const annotation = (
     case types.SET_TARGET:
       return Object.assign({}, state, {
         target: action.selector,
+      });
+    case types.SET_PRIVACY:
+      return Object.assign({}, state, {
+        private: action.private,
+      });
+    case types.SET_GROUP:
+      return Object.assign({}, state, {
+        groupId: action.groupId,
       });
     default:
       return state;

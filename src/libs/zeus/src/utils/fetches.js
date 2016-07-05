@@ -45,7 +45,7 @@ export const fetchAnnotes = (user) => { // TODO: change to fetchUserAnnotes, use
 
 export const fetchGroupAnnotes = (groupId) => {
   const source = window.location.href;
-  const query = `${baseUrl}/api/group?GroupId=${groupId}&&source=${source}`;
+  const query = `${baseUrl}/api/group/doc?GroupId=${groupId}&&source=${source}`;
 
   return fetch(query)
     .then(res => res.json());

@@ -382,8 +382,7 @@ router.get('/api/group', function(req, res) {
     }],
     where: {
       // private: 'Group',
-      groupId: req.query.GroupId,
-      source: req.query.source
+      groupId: req.query.GroupId
     },
     order: [['updatedAt', 'DESC']]
   }).then(function(annotations) {
@@ -507,7 +506,8 @@ router.get('/api/group/doc', function(req, res) {
           $in: userList
         },
         source: req.query.source,
-        private: 'Public'
+        groupId: req.query.GroupId
+        // private: 'Public'
       },
       order: [['createdAt', 'ASC']]
     }).then(function(annotations) {

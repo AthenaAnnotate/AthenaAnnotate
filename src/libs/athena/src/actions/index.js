@@ -81,6 +81,11 @@ export const clearAnnote = () => ({
   type: types.CLEAR_ANNOTATION,
 });
 
+export const setAnnoteGroup = (groupId) => ({
+  type: types.SET_GROUP,
+  groupId,
+});
+
 // Sets the value for state.annotation
 export const setAnnote = annote => ({
   type: types.SET_ANNOTATION,
