@@ -16,6 +16,7 @@ import {
   DELETE_ANNOTE,
   DISPLAY_ANNOTE,
   SEND_CHANNELS,
+  CHANGE_CHANNELS,
 } from '../../../common/messageTypes';
 
 import {
@@ -102,6 +103,10 @@ class App extends Component {
     this.postMessageToParent({ type: HIDE_IFRAME });
   }
 
+  channelSelectHandler(channel) {
+    this.postMessageToParent({ type: CHANGE_CHANNEL, channel });
+  }
+
   submitHandler() {
     const { actions: { addAnnote, clearAnnote }, annotation } = this.props;
     const { body } = annotation;
@@ -175,7 +180,12 @@ class App extends Component {
       <div>
         {
           this.isUserLoggedIn()
-            ? <AnnotatePanel close={this.hideFrame} del={this.deleteHandler} submit={this.submitHandler} />
+            ? <AnnotatePanel
+              close={this.hideFrame}
+              del={this.deleteHandler}
+              submit={this.submitHandler}
+              channelSelect={this.channelSelectHandler}
+            />
             : <AuthPanel login={this.loginHandler} close={this.hideFrame} />
         }
       </div>

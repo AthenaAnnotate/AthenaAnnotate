@@ -14,6 +14,7 @@ import {
   DELETE_ANNOTE,
   DISPLAY_ANNOTE,
   SEND_CHANNELS,
+  CHANGE_CHANNELS,
 } from '../../../common/messageTypes';
 
 import {
@@ -215,8 +216,9 @@ class App extends Component {
         return this.initialLoad(event.data.user);
       case MODIFY_BODY:
         return this.createNote(event.data.body);
-      case   DELETE_ANNOTE:
+      case DELETE_ANNOTE:
         return this.deleteAnnote(event.data.annoteId);
+      case CHANGE_CHANNELS:
       default:
         return null;// noop , need to return some value
     }
@@ -224,6 +226,16 @@ class App extends Component {
 
   postMessageToFrame(action) {
     this.props.iframe.contentWindow.postMessage(action, '*');
+  }
+
+  changeChannelHandler(channel) {
+    if (channel.type === 'group') {
+      // fetch group annotes for this doc
+    } else if (channel.type === 'user') {
+      // fetch user's annotes for this doc
+    } else {
+      // handle error
+    }
   }
 
   toggleDisplayFrame() {

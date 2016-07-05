@@ -25,3 +25,4 @@ export const GET_IDS = 'GET_IDS';
 export const SET_IDS = 'SET_IDS';
 
 export const SEND_CHANNELS = 'SEND_CHANNELS';
+export const CHANGE_CHANNELS = 'CHANGE_CHANNELS';

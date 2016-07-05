@@ -17,13 +17,13 @@ class AnnotatePanel extends Component {
   }
 
   render () {
-    const { close, submit, del, widget, annotation, channels, actions } = this.props;
+    const { close, submit, del, channelSelect, widget, annotation, actions } = this.props;
     const { exact } = annotation.target.selector;
 
     return (
       <div>
         <Button onClick={close}> Close </Button>
-        <ChannelsMenu />
+        <ChannelsMenu channelSelect={channelSelect} />
         <form>
           <FormGroup controlId="annoteFormId">
             <FormControl
