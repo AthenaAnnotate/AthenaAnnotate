@@ -28,6 +28,7 @@ import { wrapAnnote, unwrapAnnote, retrieveAnnote } from '../engine/';
 import {
   saveAnnote,
   fetchUser,
+  fetchChannels,
   fetchAnnotes,
   fetchGroupAnnotes,
   fetchDelete,
@@ -47,6 +48,7 @@ class App extends Component {
       },
     };
 
+    this.changeChannelHandler = this.changeChannelHandler.bind(this);
     this.getChannels = this.getChannels.bind(this);
     this.setController = this.setController.bind(this);
     this.deleteAnnote = this.deleteAnnote.bind(this);
@@ -94,31 +96,21 @@ class App extends Component {
   }
 
   getChannels() {
-    // fetch user's groups & followed-users
-    const user = {
-      id: this.user.id,
-      name: this.user.facebook.name,
-      type: 'user',
-    };
-
-    const channels = {
-      current: user.name,
-      channels: [
-        {
-          id: 1,
-          name: 'academics',
-          type: 'group',
+    fetchChannels(this.user.id)
+    .then(channels => {
+      console.log('getChannels: ', channels);
+      this.postMessageToFrame({
+        type: SEND_CHANNELS,
+        channels: {
+          current: {
+            id: this.user.id,
+            name: this.user.facebook.name,
+            type: 'user',
+          },
+          channels,
         },
-        {
-          id: 1,
-          name: 'plato',
-          type: 'user',
-        },
-        user,
-      ],
-    };
-    console.log('getChannels: ', channels);
-    this.postMessageToFrame({ type: SEND_CHANNELS, channels });
+      });
+    });
   }
 
   setController(e) {
@@ -134,13 +126,13 @@ class App extends Component {
     });
   }
 
-
   initialLoad(fbAcc) { // TODO: change name to onSignIn ?
     this.setUser(fbAcc)
       .then(user => {
         fetchAnnotes(user)
           .then(annotes => {
             if (!!annotes.length) {
+              console.log('annotes: ', annotes);
               this.annoteId = this.getAnnoteId(annotes[annotes.length - 1].id);
               annotes.forEach(annote => {
                 retrieveAnnote(document.body, annote, () => {
@@ -239,7 +231,15 @@ class App extends Component {
   changeChannelHandler(channel) {
     if (channel.type === 'group') {
       // fetch group annotes for this doc
-      fetchGroupAnnotes(channel.id);
+      fetchGroupAnnotes(channel.id)
+      .then(annotes => {
+        console.log('annotes: ', annotes);
+        document.querySelectorAll('athena-annote')
+        .forEach(annote => {
+          unwrapAnnote(annote);
+        });
+        this.postMessageToFrame({ type: SEND_ANNOTES, annotes });
+      });
       console.log(channel);
     } else if (channel.type === 'user') {
       // fetch user's annotes for this doc

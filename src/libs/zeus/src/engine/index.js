@@ -217,8 +217,9 @@ export const wrapAnnote = (range, annoteId, cb) => {
   });
 };
 
-export const unwrapAnnote = (annoteId) => {
-  const node = document.querySelector(`[data-id='${annoteId}']`);
+export const unwrapAnnote = (annote) => {
+  const node = typeof annote === 'object' ?
+    annote : document.querySelector(`[data-id='${annote}']`);
   const { parentNode, nextSibling } = node;
   const content = node.textContent;
   const textNode = document.createTextNode(content);

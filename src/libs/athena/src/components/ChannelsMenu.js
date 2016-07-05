@@ -10,7 +10,7 @@ const populateChannels = (channels, channelSelect) => (
 );
 
 const ChannelsMenu = ({ channels, channelSelect }) => (
-  <DropdownButton title={channels.current} id={'channel-dropdown'}>
+  <DropdownButton title={channels.current.name} id={'channel-dropdown'}>
     {populateChannels(channels.channels, channelSelect)}
   </DropdownButton>
 );

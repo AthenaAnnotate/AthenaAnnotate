@@ -30,6 +30,11 @@ export const fetchUser = (fbAcc) => {
   .then(res => res.json());
 };
 
+export const fetchChannels = (userId) => (
+  fetch(`${baseUrl}/api/channels?UserId=${userId}`)
+    .then(res => res.json())
+);
+
 export const fetchAnnotes = (user) => { // TODO: change to fetchUserAnnotes, user to userId
   const source = window.location.href;
   const query = `${baseUrl}/api/doc?UserId=${user.id}&&source=${source}`;

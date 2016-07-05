@@ -105,7 +105,6 @@ class App extends Component {
   }
 
   channelSelectHandler(channel) {
-    console.log('channel: ', channel);
     this.postMessageToParent({ type: CHANGE_CHANNEL, channel });
   }
 
@@ -126,7 +125,7 @@ class App extends Component {
   }
 
   loginHandler() {
-    // const { actions: { login } } = this.props;
+  const { actions: { login } } = this.props;
     login(fbAcc => {
       this.postMessageToParent({ type: SEND_USER, user: fbAcc });
     });
@@ -153,6 +152,19 @@ class App extends Component {
     return null;
   }
 
+  // addAnnotesHander(annotes) {
+  //   const { annotations, actions: { addAnnote } } = this.props;
+  //   // remove all existing annotes
+
+  //   // dispatch annotes
+  // }
+
+  handleChannels(channels) {
+    // filter channels:
+    // channels that have annotations, dispatch to channels
+    // channels that are groups, dispatch to groups
+  }
+
   // take action on events we know about
   handleMessageEvent(event) {
     const { actions: {
@@ -177,7 +189,6 @@ class App extends Component {
       case DISPLAY_ANNOTE:
         return this.displayAnnote(event.data.annoteId);
       case SEND_CHANNELS:
-        console.log(event.data.channels);
         return setChannels(event.data.channels);
       default:
         return undefined;
@@ -189,8 +200,8 @@ class App extends Component {
     return (
       <div>
         {
-          this.isUserLoggedIn()
-            ? <AnnotatePanel
+          this.isUserLoggedIn() ?
+            <AnnotatePanel
               close={this.hideFrame}
               del={this.deleteHandler}
               submit={this.submitHandler}
