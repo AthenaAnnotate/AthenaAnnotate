@@ -29,6 +29,7 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    this.channelSelectHandler = this.channelSelectHandler.bind(this);
     this.loginHandler = this.loginHandler.bind(this);
     this.submitHandler = this.submitHandler.bind(this);
     this.deleteHandler = this.deleteHandler.bind(this);
@@ -104,6 +105,7 @@ class App extends Component {
   }
 
   channelSelectHandler(channel) {
+    console.log('channel: ', channel);
     this.postMessageToParent({ type: CHANGE_CHANNEL, channel });
   }
 
@@ -125,7 +127,7 @@ class App extends Component {
 
   loginHandler() {
     // const { actions: { login } } = this.props;
-    this.login(fbAcc => {
+    login(fbAcc => {
       this.postMessageToParent({ type: SEND_USER, user: fbAcc });
     });
   }

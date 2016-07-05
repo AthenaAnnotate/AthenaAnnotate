@@ -25,7 +25,14 @@ import {
 } from '../constants';
 
 import { wrapAnnote, unwrapAnnote, retrieveAnnote } from '../engine/';
-import { saveAnnote, fetchUser, fetchAnnotes, fetchDelete } from '../utils/fetches';
+import {
+  saveAnnote,
+  fetchUser,
+  fetchAnnotes,
+  fetchGroupAnnotes,
+  fetchDelete,
+} from '../utils/fetches';
+
 import { getText, createAnnote } from '../utils/utils';
 
 class App extends Component {
@@ -219,6 +226,7 @@ class App extends Component {
       case DELETE_ANNOTE:
         return this.deleteAnnote(event.data.annoteId);
       case CHANGE_CHANNEL:
+        return  this.changeChannelHandler(event.data.channel);
       default:
         return null;// noop , need to return some value
     }
@@ -231,8 +239,11 @@ class App extends Component {
   changeChannelHandler(channel) {
     if (channel.type === 'group') {
       // fetch group annotes for this doc
+      fetchGroupAnnotes(channel.id);
+      console.log(channel);
     } else if (channel.type === 'user') {
       // fetch user's annotes for this doc
+      console.log(channel);
     } else {
       // handle error
     }
@@ -285,6 +296,7 @@ class App extends Component {
         this.postMessageToFrame({ type: DISPLAY_ANNOTE, annoteId: annote.id });
         this.showAthena();
       });
+      console.log(annote);
       this.annoteId++; // TODO: move into createAnnote
     } else {
       this.showAthena();

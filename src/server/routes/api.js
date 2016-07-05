@@ -382,7 +382,8 @@ router.get('/api/group', function(req, res) {
     }],
     where: {
       // private: 'Group',
-      groupId: req.query.GroupId
+      groupId: req.query.GroupId,
+      source: req.query.source
     },
     order: [['updatedAt', 'DESC']]
   }).then(function(annotations) {
