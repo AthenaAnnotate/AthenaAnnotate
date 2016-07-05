@@ -14,7 +14,7 @@ import {
   DELETE_ANNOTE,
   DISPLAY_ANNOTE,
   SEND_CHANNELS,
-  CHANGE_CHANNELS,
+  CHANGE_CHANNEL,
 } from '../../../common/messageTypes';
 
 import {
@@ -218,7 +218,7 @@ class App extends Component {
         return this.createNote(event.data.body);
       case DELETE_ANNOTE:
         return this.deleteAnnote(event.data.annoteId);
-      case CHANGE_CHANNELS:
+      case CHANGE_CHANNEL:
       default:
         return null;// noop , need to return some value
     }
