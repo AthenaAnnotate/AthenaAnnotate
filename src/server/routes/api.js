@@ -168,7 +168,7 @@ router.get('/api/discover', function(req, res) {
       UserId: {
         $notIn: [req.query.UserId]
       },
-      private: 'Public'
+      private: false
     },
     order: [['updatedAt', 'DESC']]
   }).then(function(annotations) {
@@ -201,7 +201,7 @@ router.get('/api/following', function(req, res) {
             return user.dataValues.follows.id;
           })
         },
-        private: 'Public'
+        private: false
       },
       order: [['updatedAt', 'DESC']]
     }).then(function(annotations) {
@@ -531,7 +531,7 @@ router.get('/api/following/doc', function(req, res) {
     where: {
       UserId: req.query.UserId,
       source: req.query.source,
-      private: 'Public'
+      private: false
     },
     order: [['createdAt', 'ASC']]
   }).then(function(annotations) {
@@ -587,7 +587,7 @@ router.get('/api/user', function(req, res) {
     }],
     where: {
       UserId: req.query.UserId,
-      private: 'Public'
+      private: false
     },
     order: [['updatedAt', 'DESC']]
   }).then(function(annotations) {

@@ -54,8 +54,8 @@ const Editor = ({ body, onCancel, editText, onSave, editor, onDelete, group, upd
             <span className="caret"></span>
           </button>
           <ul className="dropdown-menu">
-            <li><a onClick={() => updatePrivacy('Private')}>Private</a></li>
-            <li><a onClick={() => updatePrivacy('Public')}>Public</a></li>
+            <li><a onClick={() => updatePrivacy(true)}>Private</a></li>
+            <li><a onClick={() => updatePrivacy(false)}>Public</a></li>
           </ul>
         </div>
         <div className="btn-group">
