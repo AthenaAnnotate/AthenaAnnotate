@@ -16,7 +16,7 @@ import {
   DELETE_ANNOTE,
   DISPLAY_ANNOTE,
   SEND_CHANNELS,
-  CHANGE_CHANNELS,
+  CHANGE_CHANNEL,
 } from '../../../common/messageTypes';
 
 import {
@@ -115,9 +115,17 @@ class App extends Component {
     clearAnnote(); // rest annote to empty shape
   }
 
+  login(cb) {
+    window.FB.login(res => {
+      if (res.status === 'connected') {
+        getUserFromFB().then(user => cb(user));
+      } else { console.log('auth fail'); }
+    }, { scope: 'public_profile,email' });
+  }
+
   loginHandler() {
-    const { actions: { login } } = this.props;
-    login(fbAcc => {
+    // const { actions: { login } } = this.props;
+    this.login(fbAcc => {
       this.postMessageToParent({ type: SEND_USER, user: fbAcc });
     });
   }
