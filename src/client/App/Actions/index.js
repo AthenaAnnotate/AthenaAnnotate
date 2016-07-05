@@ -492,9 +492,10 @@ export const updatePrivacy = (privacy) => (
 );
 
 // To handle changing of group for annotation
-export const updateGroup = (groupId) => (
+export const updateGroup = (groupId, groupName) => (
   {
     type: 'UPDATE_GROUP',
     groupId,
+    groupName,
   }
 );

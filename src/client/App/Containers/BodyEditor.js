@@ -14,8 +14,8 @@ const mapDispatchToProps = (dispatch) => (
     editText: (body) => {
       dispatch(actions.editText(body));
     },
-    updateGroup: (groupId) => {
-      dispatch(actions.updateGroup(groupId));
+    updateGroup: (groupId, groupName) => {
+      dispatch(actions.updateGroup(groupId, groupName));
     },
     updatePrivacy: (bool) => {
       dispatch(actions.updatePrivacy(bool));

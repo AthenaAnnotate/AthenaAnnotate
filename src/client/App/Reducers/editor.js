@@ -11,6 +11,7 @@ const editor = (state = {}, action) => {
     case 'UPDATE_GROUP':
       return Object.assign({}, state, {
         group: action.groupId,
+        groupName: action.groupName,
       });
     default:
       return state;

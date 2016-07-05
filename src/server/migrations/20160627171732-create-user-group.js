@@ -14,6 +14,9 @@ module.exports = {
       GroupId: {
         type: Sequelize.INTEGER
       },
+      adminRights: {
+        type: Sequelize.BOOLEAN
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
