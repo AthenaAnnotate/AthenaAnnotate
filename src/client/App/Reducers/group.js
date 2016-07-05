@@ -22,9 +22,9 @@ const group = (state = { showGroups: false, loaded: false }, action) => {
       return Object.assign({}, state, {
         edit: '',
       });
-    case 'SHOW_MEMBERS':
+    case 'SHOW_INFO':
       return Object.assign({}, state, {
-        members: action.members,
+        info: action.info,
       });
     default:
       return state;

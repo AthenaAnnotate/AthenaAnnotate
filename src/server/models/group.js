@@ -4,6 +4,9 @@ module.exports = function(sequelize, DataTypes) {
     name: {
       type: DataTypes.STRING,
       unique: true
+    },
+    creatorId: {
+      type: DataTypes.INTEGER
     }
   }, {
     classMethods: {

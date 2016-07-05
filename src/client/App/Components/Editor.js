@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react';
 const Editor = ({ body, onCancel, editText, onSave, editor, onDelete, group, updateGroup, updatePrivacy }) => {
   const groupList = group.groups.map(grp => (
     <li>
-      <a onClick={() => updateGroup(grp.id)}>{grp.name}</a>
+      <a onClick={() => updateGroup(grp.id, grp.name)}>{grp.name}</a>
     </li>
   ));
   return (
@@ -50,7 +50,7 @@ const Editor = ({ body, onCancel, editText, onSave, editor, onDelete, group, upd
             aria-haspopup="true"
             aria-expanded="false"d
           >
-            Privacy
+            {editor.private}
             <span className="caret"></span>
           </button>
           <ul className="dropdown-menu">
@@ -66,7 +66,7 @@ const Editor = ({ body, onCancel, editText, onSave, editor, onDelete, group, upd
             aria-haspopup="true"
             aria-expanded="false"
           >
-            Group
+            {editor.groupName}
             <span className="caret"></span>
           </button>
           <ul className="dropdown-menu">

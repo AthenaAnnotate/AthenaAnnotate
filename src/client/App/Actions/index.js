@@ -1,6 +1,6 @@
 require('isomorphic-fetch');
 require('es6-promise').polyfill();
-
+import { saveUserToStore } from '../../../libs/athena/src/actions';
 export * from '../../../libs/athena/src/actions';
 
 // To load all annotations based on filter
@@ -192,21 +192,6 @@ export const deleteDocDB = (docId, userId) => (
 export const switchView = () => (
   {
     type: 'SWITCH_VIEW',
-  }
-);
-
-// To handle switching between different lists
-const changeFilter = filter => (
-  {
-    type: 'FILTER',
-    filter,
-  }
-);
-
-export const setFilter = filter => (
-  dispatch => {
-    dispatch(changeFilter(filter));
-    dispatch(exitProfile());
   }
 );
 
@@ -449,18 +434,17 @@ export const acceptInvite = (groupId, userId, accept) => (
       }),
     })
     .then(response => response.json())
-    .then(result => {
-      console.log(result);
+    .then(() => {
       dispatch(removeInvites(groupId));
       dispatch(loadGroupsDB(userId));
     })
 );
 
 // To handle showing members of a group
-const loadMembers = (members) => (
+const loadMembers = (info) => (
   {
-    type: 'SHOW_MEMBERS',
-    members,
+    type: 'SHOW_INFO',
+    info,
   }
 );
 
@@ -492,9 +476,83 @@ export const updatePrivacy = (privacy) => (
 );
 
 // To handle changing of group for annotation
-export const updateGroup = (groupId) => (
+export const updateGroup = (groupId, groupName) => (
   {
     type: 'UPDATE_GROUP',
     groupId,
+    groupName,
+  }
+);
+
+const clearSearch = () => (
+  {
+    type: 'CLEAR_SEARCH',
+  }
+);
+
+export const inviteUsers = (otherUsersArray, groupId, userName) => (
+  dispatch =>
+    fetch('http://localhost:3000/api/groups/invite', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        GroupId: groupId,
+        creator: userName,
+        otherUsersArray,
+      }),
+    })
+    .then(() => {
+      dispatch(clearSearch());
+    })
+);
+
+export const updateTitle = (title) => (
+  {
+    type: 'UPDATE_TITLE',
+    title,
+  }
+);
+
+export const updateName = (name) => (
+  {
+    type: 'UPDATE_NAME',
+    name,
+  }
+);
+
+export const updateProfile = (name, title, id) => (
+  dispatch =>
+    fetch('http://localhost:3000/api/users', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name,
+        title,
+        id,
+      }),
+    })
+    .then(response => response.json())
+    .then(updatedProfile => {
+      dispatch(saveUserToStore(updatedProfile));
+    })
+    .catch(error => console.log(error))
+);
+
+// To handle switching between different lists
+const changeFilter = filter => (
+  {
+    type: 'FILTER',
+    filter,
+  }
+);
+
+export const setFilter = filter => (
+  dispatch => {
+    dispatch(changeFilter(filter));
+    dispatch(exitProfile());
   }
 );
