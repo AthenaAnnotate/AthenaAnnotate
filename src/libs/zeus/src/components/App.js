@@ -127,7 +127,6 @@ class App extends Component {
         fetchAnnotes(user)
           .then(annotes => {
             if (!!annotes.length) {
-              console.log('annotes: ', annotes);
               this.annoteId = this.getAnnoteId(annotes[annotes.length - 1].id);
               annotes.forEach(annote => {
                 retrieveAnnote(document.body, annote, () => {
@@ -226,10 +225,8 @@ class App extends Component {
   changeChannelHandler(channel) {
     if (channel.type === 'group') {
       // fetch group annotes for this doc
-      console.log('channel: ', channel);
       fetchGroupAnnotes(channel.id)
       .then(annotes => {
-        console.log('channel annotes: ', annotes);
         document.querySelectorAll('athena-annote')
         .forEach(annote => {
           unwrapAnnote(annote);
@@ -246,7 +243,6 @@ class App extends Component {
       });
     } else if (channel.type === 'user') {
       // fetch user's annotes for this doc
-      console.log('new channel: ', channel);
       fetchAnnotes(channel)
       .then(annotes => {
         document.querySelectorAll('athena-annote')
@@ -302,7 +298,6 @@ class App extends Component {
       body,
       groupId,
     });
-    console.log('this.annote: ', this.annote);
     saveAnnote(this.annote);
     this.hideAthena();
   }
@@ -318,7 +313,6 @@ class App extends Component {
         this.postMessageToFrame({ type: DISPLAY_ANNOTE, annoteId: annote.id });
         this.showAthena();
       });
-      console.log(annote);
       this.annoteId++; // TODO: move into createAnnote
     } else {
       this.showAthena();

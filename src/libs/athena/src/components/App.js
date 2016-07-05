@@ -114,7 +114,6 @@ class App extends Component {
 
   submitHandler() {
     const { actions: { addAnnote, clearAnnote }, annotation, channels } = this.props;
-    console.log('channels at submit: ', channels);
     annotation.groupId = channels.current.type === 'group' ?
       channels.current.id : null;
     const { body, groupId } = annotation;
@@ -140,7 +139,6 @@ class App extends Component {
 
   deleteHandler() {
     const { annotation: { id } } = this.props;
-    console.log('id: ', id);
     this.postMessageToParent({ type: DELETE_ANNOTE, annoteId: id });
   }
 

@@ -6,7 +6,6 @@ import * as options from '../constants/fetchOptions';
 const baseUrl = `https://${process.env.ATHENA_HOST}:${process.env.HTTPS_PORT}`;
 
 export const saveAnnote = (annote) => {
-  console.log(options.API_CREATE);
   fetch(
     options.API_CREATE,
     createPOST(annote)
