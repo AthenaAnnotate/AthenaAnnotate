@@ -407,15 +407,9 @@ router.get('/api/group', function(req, res) {
 // });
 
 // To handle joining an existing Group
-router.post('/api/group', function(req, res) {
-  models.UserGroup.create({
-    UserId: req.body.userId,
-    GroupId: req.body.groupId
-  }).then(function(association) {
-    res.send(association);
-  }).catch(function(error) {
-    res.send(error);
-  });
+router.post('/api/groups/invite', function(req, res) {
+  addOtherUsers(req.body.otherUsersArray, req.body.GroupId, req.body.creator);
+  res.send('invites sent');
 });
 
 // To handle searching for users
@@ -568,22 +562,32 @@ router.get('/api/groups/members', function(req, res) {
     include: [{
       model: models.User,
       as: 'groups'
+    }, {
+      model: models.Group,
+      as: 'users'
     }],
     where: {
       GroupId: req.query.GroupId
     }
   }).then(function(users) {
+    console.log(users[0].dataValues.users.dataValues);
     var members = users.map(function(user) {
       return user.dataValues.groups.dataValues;
     });
-    res.send(members.sort(function(a, b) {
-      if (a.name.toUpperCase() < b.name.toUpperCase()) {
-        return -1;
-      } else if (a.name.toUpperCase() > b.name.toUpperCase()) {
-        return 1;
-      }
-      return 0;
-    }));
+    res.send({
+      groupName: users[0].dataValues.users.dataValues.name,
+      creator: members.filter(function(member) {
+        return member.id === users[0].dataValues.users.dataValues.creatorId;
+      })[0].name,
+      members: members.sort(function(a, b) {
+        if (a.name.toUpperCase() < b.name.toUpperCase()) {
+          return -1;
+        } else if (a.name.toUpperCase() > b.name.toUpperCase()) {
+          return 1;
+        }
+        return 0;
+      })
+    });
   }).catch(function(err) {
     res.send(err);
   });

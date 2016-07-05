@@ -24,6 +24,11 @@ const search = (state = { users: [], selected: [] }, action) => {
       return Object.assign({}, state, {
         selected,
       });
+    case 'CLEAR_SEARCH':
+      return Object.assign({}, state, {
+        users: [],
+        selected: [],
+      });
     default:
       return state;
   }

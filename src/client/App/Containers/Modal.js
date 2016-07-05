@@ -31,6 +31,9 @@ const mapDispatchToProps = (dispatch) => (
     deselectUser: (name) => {
       dispatch(actions.deselectUser(name));
     },
+    inviteUsers: (array, groupId, username) => {
+      dispatch(actions.inviteUsers(array, groupId, username));
+    },
   }
 );
 

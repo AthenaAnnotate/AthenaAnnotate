@@ -51,7 +51,7 @@ const Profile = ({ user, invites, exitProfile, acceptInvite, group, following, s
           <label htmlFor="title">Title</label>
           <input type="text" className="form-control" id="title" defaultValue={user.title} />
         </div>
-        <button type="submit" className="btn btn-default">Save</button>
+        <button type="submit" className="btn btn-default" onClick={(e) => { e.preventDefault(); }}>Save</button>
         <button
           className="btn btn-default"
           onClick={(e) => {

@@ -457,10 +457,10 @@ export const acceptInvite = (groupId, userId, accept) => (
 );
 
 // To handle showing members of a group
-const loadMembers = (members) => (
+const loadMembers = (info) => (
   {
-    type: 'SHOW_MEMBERS',
-    members,
+    type: 'SHOW_INFO',
+    info,
   }
 );
 
@@ -470,6 +470,7 @@ export const showMembers = (groupId) => (
     return fetch(`http://localhost:3000/api/groups/members?GroupId=${groupId}`)
     .then(response => response.json())
     .then(members => {
+      console.log(members);
       dispatch(loadMembers(members));
       dispatch(showModal());
     });
@@ -498,4 +499,29 @@ export const updateGroup = (groupId, groupName) => (
     groupId,
     groupName,
   }
+);
+
+const clearSearch = () => (
+  {
+    type: 'CLEAR_SEARCH',
+  }
+);
+
+export const inviteUsers = (otherUsersArray, groupId, userName) => (
+  dispatch =>
+    fetch('http://localhost:3000/api/groups/invite', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        GroupId: groupId,
+        creator: userName,
+        otherUsersArray,
+      }),
+    })
+    .then(response => {
+      dispatch(clearSearch());
+      console.log(response);
+    })
 );

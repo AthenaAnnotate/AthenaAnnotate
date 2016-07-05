@@ -25,6 +25,7 @@ const ModalComponent = ({
   searchUsers,
   selectUser,
   deselectUser,
+  inviteUsers,
 }) => (
   <Modal
     isOpen={modal.show}
@@ -46,9 +47,14 @@ const ModalComponent = ({
       /> : null}
     {modal.modal === 'members' ?
       <MembersModal
+        user={user}
+        search={search}
+        selectUser={selectUser}
+        searchUsers={searchUsers}
+        deselectUser={deselectUser}
         group={group}
-        modal={modal}
         showModal={showModal}
+        inviteUsers={inviteUsers}
       /> : null}
   </Modal>
   );
@@ -64,6 +70,7 @@ ModalComponent.propTypes = {
   search: PropTypes.object.isRequired,
   selectUser: PropTypes.func.isRequired,
   deselectUser: PropTypes.func.isRequired,
+  inviteUsers: PropTypes.func.isRequired,
 };
 
 export default ModalComponent;

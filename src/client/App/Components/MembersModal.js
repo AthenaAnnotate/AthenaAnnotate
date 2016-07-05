@@ -8,12 +8,15 @@ const membersModal = ({
   user,
   searchUsers,
   deselectUser,
+  inviteUsers,
 }) => {
-  const members = group.members.map(member => (
+  const members = group.info.members.map(member => (
     <li key={member.id}>
       <a>
         {member.name}
       </a>
+      if user has invite privileges -> show revoke button
+      if user does not -> show grant privileges
     </li>
   ));
   const userList = search.users.map(u => (
@@ -32,8 +35,8 @@ const membersModal = ({
   ));
   return (
     <div>
-      <h4>Creator</h4>
-      <span>{group.creator}</span>
+      <h4>Group Administrator</h4>
+      <span>{group.info.creator}</span>
       <h4>Members</h4>
       <ul>
         {members}
@@ -49,7 +52,7 @@ const membersModal = ({
         ?
         null
         :
-        <ul className="dropdown-menu autocomplete">
+        <ul>
           {userList}
         </ul>
       }
@@ -62,6 +65,9 @@ const membersModal = ({
           <ul>
             {selectedUserList}
           </ul>
+          <button onClick={() => inviteUsers(search.selected, group.selected, user.facebook.name)}>
+            Invite
+          </button>
         </div>
       }
       <button className="btn btn-default" onClick={() => showModal()}>Cancel</button>
@@ -74,10 +80,10 @@ membersModal.propTypes = {
   search: PropTypes.object.isRequired,
   selectUser: PropTypes.func.isRequired,
   searchUsers: PropTypes.func.isRequired,
-  modal: PropTypes.object.isRequired,
   group: PropTypes.object.isRequired,
   showModal: PropTypes.func.isRequired,
   deselectUser: PropTypes.func.isRequired,
+  inviteUsers: PropTypes.func.isRequired,
 };
 
 export default membersModal;
