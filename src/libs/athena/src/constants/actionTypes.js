@@ -23,3 +23,8 @@ export const SET_TARGET = 'SET_TARGET';
 // annotations
 export const ADD_ANNOTATION = 'ADD_ANNOTATION';
 
+// channels
+export const SET_CURRENT_CHANNEL = 'SET_CURRENT_CHANNEL';
+export const SET_CHANNELS = 'SET_CHANNELS';
+export const SET_GROUPS = 'SET_GROUPS';
+export const SET_USERS = 'SET_USERS';

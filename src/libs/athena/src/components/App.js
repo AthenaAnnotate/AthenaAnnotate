@@ -15,6 +15,7 @@ import {
   MODIFY_BODY,
   DELETE_ANNOTE,
   DISPLAY_ANNOTE,
+  SEND_CHANNELS,
 } from '../../../common/messageTypes';
 
 import {
@@ -142,6 +143,7 @@ class App extends Component {
     const { actions: {
       saveUserToStore,
       addAnnote,
+      setChannels,
       },
      } = this.props;
     switch (event.data.type) {
@@ -159,6 +161,9 @@ class App extends Component {
         return addAnnote(event.data.annote);
       case DISPLAY_ANNOTE:
         return this.displayAnnote(event.data.annoteId);
+      case SEND_CHANNELS:
+        console.log(event.data.channels);
+        return setChannels(event.data.channels);
       default:
         return undefined;
     }

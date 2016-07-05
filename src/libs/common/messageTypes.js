@@ -23,3 +23,5 @@ export const GET_USER_ID = 'GET_USER_ID';
 export const SEND_USER_ID = 'SEND_USER_ID';
 export const GET_IDS = 'GET_IDS';
 export const SET_IDS = 'SET_IDS';
+
+export const SEND_CHANNELS = 'SEND_CHANNELS';

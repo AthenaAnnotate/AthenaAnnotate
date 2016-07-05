@@ -1,14 +1,16 @@
 import React, { PropTypes } from 'react';
 import { MenuItem } from 'react-bootstrap';
 
-const channelItem = (channel, eventId, cb) => (
-  <MenuItem eventKey="eventId" onSelect={cb}>
+const ChannelItem = (channel, eventId, cb) => (
+  <MenuItem eventKey={eventId} onSelect={(chan) => { console.log(chan); }}>
     {channel}
   </MenuItem>
 );
 
-channelItem.propTypes = {
-
+ChannelItem.propTypes = {
+  channel: PropTypes.object,
+  eventId: PropTypes.object,
+  cb: PropTypes.func.isRequired,
 };
 
-export default channelItem;
+export default ChannelItem;

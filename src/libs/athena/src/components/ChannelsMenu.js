@@ -1,14 +1,34 @@
 import React, { PropTypes } from 'react';
-import { DropdownButton } from 'react-bootstrap';
+import { DropdownButton, MenuItem } from 'react-bootstrap';
+import ChannelItem from './ChannelItem';
 
-const ChannelMenu = () => (
-  <DropdownButton>
+const populateChannels = channels => (
+  channels.map((channel, idx) => (
+    <MenuItem key={idx} onSelect={() => { console.log(channel); }} >
+      {channel.name}
+    </MenuItem>
+  ))
+);
 
+const ChannelsMenu = ({ user, channels }) => (
+  <DropdownButton title={channels.current} id={'channel-dropdown'}>
+    {populateChannels(channels.channels)}
   </DropdownButton>
 );
 
-ChannelMenu.propTypes = {
-
+ChannelsMenu.propTypes = {
+  user: PropTypes.object,
+  channels: PropTypes.object,
 };
 
-export default ChannelMenu;
+export default ChannelsMenu;
+
+
+      // <ChannelItem
+      //   key={idx}
+      //   channel={channel}
+      //   eventId={{ id: channel.id, type: channel.type }}
+      //   cb={chan => { console.log('chan: ', chan); }}
+      // />
+
+

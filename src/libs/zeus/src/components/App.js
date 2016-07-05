@@ -13,6 +13,7 @@ import {
   MODIFY_BODY,
   DELETE_ANNOTE,
   DISPLAY_ANNOTE,
+  SEND_CHANNELS,
 } from '../../../common/messageTypes';
 
 import {
@@ -38,6 +39,7 @@ class App extends Component {
       },
     };
 
+    this.getChannels = this.getChannels.bind(this);
     this.setController = this.setController.bind(this);
     this.deleteAnnote = this.deleteAnnote.bind(this);
     this.shortcutHandler = this.shortcutHandler.bind(this);
@@ -83,6 +85,48 @@ class App extends Component {
       });
   }
 
+  getChannels() {
+    // fetch user's groups & followed-users
+    const user = {
+      id: this.user.id,
+      name: this.user.facebook.name,
+      type: 'user',
+    };
+
+    const channels = {
+      current: user.name,
+      channels: [
+        {
+          id: 1,
+          name: 'academics',
+          type: 'group',
+        },
+        {
+          id: 1,
+          name: 'plato',
+          type: 'user',
+        },
+        user,
+      ],
+    };
+    console.log('getChannels: ', channels);
+    this.postMessageToFrame({ type: SEND_CHANNELS, channels });
+  }
+
+  setController(e) {
+    const top = `${window.scrollY + e.clientY}px`;
+    const left = `${window.scrollX + e.srcElement.getBoundingClientRect().left +
+    e.srcElement.clientWidth}px`;
+    return this.setState({
+      controls: SHOW_CONTROL_BUTTONS_CLASS,
+      pos: {
+        top,
+        left,
+      },
+    });
+  }
+
+
   initialLoad(fbAcc) { // TODO: change name to onSignIn ?
     this.setUser(fbAcc)
       .then(user => {
@@ -100,6 +144,7 @@ class App extends Component {
             } else {
               this.annoteId = 0;
             }
+            this.getChannels();
           });
       });
   }
@@ -129,19 +174,6 @@ class App extends Component {
       }
       this.hasSelection = false;
     }
-  }
-
-  setController(e) {
-    const top = `${window.scrollY + e.clientY}px`;
-    const left = `${window.scrollX + e.srcElement.getBoundingClientRect().left +
-    e.srcElement.clientWidth}px`;
-    return this.setState({
-      controls: SHOW_CONTROL_BUTTONS_CLASS,
-      pos: {
-        top,
-        left,
-      },
-    });
   }
 
   shortcutHandler(e) {

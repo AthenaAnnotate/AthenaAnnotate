@@ -92,3 +92,13 @@ export const addAnnote = annote => ({
   type: types.ADD_ANNOTATION,
   annote,
 });
+
+export const setCurrentChannel = current => ({
+  type: types.SET_CURRENT_CHANNEL,
+  current,
+});
+
+export const setChannels = channels => ({
+  type: types.SET_CHANNELS,
+  channels,
+});

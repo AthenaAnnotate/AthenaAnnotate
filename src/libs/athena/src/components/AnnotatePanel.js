@@ -5,8 +5,9 @@ import {
   ControlLabel,
   FormControl,
 } from 'react-bootstrap';
-import { saveAnnote } from '../utils/annotation';
+import ChannelsMenu from '../containers/ChannelsMenu';
 import FacebookLogout from './FacebookLogout';
+import { saveAnnote } from '../utils/annotation';
 
 import * as Actions from '../actions';
 
@@ -16,13 +17,13 @@ class AnnotatePanel extends Component {
   }
 
   render () {
-    const { close, submit, del, widget, annotation, actions } = this.props;
+    const { close, submit, del, widget, annotation, channels, actions } = this.props;
     const { exact } = annotation.target.selector;
 
     return (
       <div>
         <Button onClick={close}> Close </Button>
-
+        <ChannelsMenu />
         <form>
           <FormGroup controlId="annoteFormId">
             <FormControl
@@ -51,6 +52,7 @@ AnnotatePanel.propTypes = {
   actions: PropTypes.object,
   annotation: PropTypes.object,
   annotations: PropTypes.array,
+  channels: PropTypes.object,
   close: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
   del: PropTypes.func.isRequired,
