@@ -1,6 +1,20 @@
 import React, { PropTypes } from 'react';
 
-const Profile = ({ user, profile, invites, exitProfile, acceptInvite, group, following, setGroup, setFilter, setUser, updateName, updateTitle, updateProfile }) => {
+const Profile = ({
+  user,
+  profile,
+  invites,
+  exitProfile,
+  acceptInvite,
+  group,
+  following,
+  setGroup,
+  setFilter,
+  setUser,
+  updateName,
+  updateTitle,
+  updateProfile,
+}) => {
   const invitesList = invites.invites.map(invite => (
     <li key={invite.id}>
       <span>{invite.sentFrom} has invited you to join {invite.GroupId}.</span>
@@ -45,11 +59,23 @@ const Profile = ({ user, profile, invites, exitProfile, acceptInvite, group, fol
       <form className="profile">
         <div className="form-group">
           <label htmlFor="name">Name</label>
-          <input type="text" className="form-control" id="name" defaultValue={user.facebook.name} onChange={(e) => updateName(e.target.value)} />
+          <input
+            type="text"
+            className="form-control"
+            id="name"
+            defaultValue={user.facebook.name}
+            onChange={(e) => updateName(e.target.value)}
+          />
         </div>
         <div className="form-group">
           <label htmlFor="title">Title</label>
-          <input type="text" className="form-control" id="title" defaultValue={user.title} onChange={(e) => updateTitle(e.target.value)} />
+          <input
+            type="text"
+            className="form-control"
+            id="title"
+            defaultValue={user.title}
+            onChange={(e) => updateTitle(e.target.value)}
+          />
         </div>
         <button
           type="submit"

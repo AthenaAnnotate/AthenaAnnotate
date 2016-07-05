@@ -15,8 +15,6 @@ const membersModal = ({
       <a>
         {member.name}
       </a>
-      if user has invite privileges -> show revoke button
-      if user does not -> show grant privileges
     </li>
   ));
   const userList = search.users.map(u => (

@@ -195,21 +195,6 @@ export const switchView = () => (
   }
 );
 
-// To handle switching between different lists
-const changeFilter = filter => (
-  {
-    type: 'FILTER',
-    filter,
-  }
-);
-
-export const setFilter = filter => (
-  dispatch => {
-    dispatch(changeFilter(filter));
-    dispatch(exitProfile());
-  }
-);
-
 // To handle following a user
 const toggleFollowUser = (userId) => (
   {
@@ -449,8 +434,7 @@ export const acceptInvite = (groupId, userId, accept) => (
       }),
     })
     .then(response => response.json())
-    .then(result => {
-      console.log(result);
+    .then(() => {
       dispatch(removeInvites(groupId));
       dispatch(loadGroupsDB(userId));
     })
@@ -470,7 +454,6 @@ export const showMembers = (groupId) => (
     return fetch(`http://localhost:3000/api/groups/members?GroupId=${groupId}`)
     .then(response => response.json())
     .then(members => {
-      console.log(members);
       dispatch(loadMembers(members));
       dispatch(showModal());
     });
@@ -520,9 +503,8 @@ export const inviteUsers = (otherUsersArray, groupId, userName) => (
         otherUsersArray,
       }),
     })
-    .then(response => {
+    .then(() => {
       dispatch(clearSearch());
-      console.log(response);
     })
 );
 
@@ -555,8 +537,22 @@ export const updateProfile = (name, title, id) => (
     })
     .then(response => response.json())
     .then(updatedProfile => {
-      console.log(updatedProfile);
       dispatch(saveUserToStore(updatedProfile));
     })
     .catch(error => console.log(error))
+);
+
+// To handle switching between different lists
+const changeFilter = filter => (
+  {
+    type: 'FILTER',
+    filter,
+  }
+);
+
+export const setFilter = filter => (
+  dispatch => {
+    dispatch(changeFilter(filter));
+    dispatch(exitProfile());
+  }
 );
