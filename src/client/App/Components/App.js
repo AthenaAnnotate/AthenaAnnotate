@@ -103,7 +103,7 @@ App.propTypes = {
   actions: PropTypes.object,
   loading: PropTypes.bool.isRequired,
   filter: PropTypes.string,
-  profile: PropTypes.bool.isRequired,
+  profile: PropTypes.object.isRequired,
   following: PropTypes.object.isRequired,
   group: PropTypes.object.isRequired,
   invites: PropTypes.object.isRequired,
