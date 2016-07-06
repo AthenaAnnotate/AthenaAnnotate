@@ -22,6 +22,7 @@ module.exports = function(array, res) {
         suffix: item.suffix
       }
     };
+    obj.groupId = item.groupId;
     obj.private = item.private;
     obj.groupId = item.groupId;
     result.push(obj);

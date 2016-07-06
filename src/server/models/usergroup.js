@@ -2,7 +2,8 @@
 module.exports = function(sequelize, DataTypes) {
   var UserGroup = sequelize.define('UserGroup', {
     UserId: DataTypes.INTEGER,
-    GroupId: DataTypes.INTEGER
+    GroupId: DataTypes.INTEGER,
+    adminRights: DataTypes.BOOLEAN
   }, {
     classMethods: {
       associate: function(models) {

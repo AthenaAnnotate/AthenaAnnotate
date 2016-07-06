@@ -106,7 +106,6 @@ router.delete('/api/annotations', function(req, res) {
 
 // BOTH - finds or creates User
 router.post('/api/users', function(req, res) {
-  console.log(req.body);
   models.User.findOrCreate({
     where: {
       facebookId: req.body.id
@@ -132,7 +131,7 @@ router.put('/api/users', function(req, res) {
     where: { id: req.body.id },
     returning: true
   }).then(function(users) {
-    res.send(users[1]);
+    userConstructor(users[1][0].dataValues, res);
   }).catch(function(err) {
     res.send(err);
   });
@@ -169,7 +168,7 @@ router.get('/api/discover', function(req, res) {
       UserId: {
         $notIn: [req.query.UserId]
       },
-      private: 'Public'
+      private: false
     },
     order: [['updatedAt', 'DESC']]
   }).then(function(annotations) {
@@ -190,7 +189,6 @@ router.get('/api/following', function(req, res) {
       UserId: req.query.UserId
     }
   }).then(function(users) {
-    // console.log(users);
     models.Annotation.findAll({
       include: [{
         model: models.User
@@ -203,7 +201,7 @@ router.get('/api/following', function(req, res) {
             return user.dataValues.follows.id;
           })
         },
-        private: 'Public'
+        private: false
       },
       order: [['updatedAt', 'DESC']]
     }).then(function(annotations) {
@@ -288,11 +286,7 @@ router.get('/api/follow', function(req, res) {
     where: {
       UserId: req.query.UserId
     }
-    // attributes: ['followsId']
   }).then(function(users) {
-    console.log(users.map(function(user) {
-      return user.dataValues.follows;
-    }));
     res.send(users.map(function(user) {
       return user.dataValues.follows;
     }));
@@ -305,24 +299,22 @@ router.get('/api/follow', function(req, res) {
 
 // BOTH - finds a Group, or creates a Group and adds User as a member
 router.post('/api/groups', function(req, res) {
-  console.log(req.body);
   models.Group.findOrCreate({
     where: {
       name: req.body.name
+    },
+    defaults: {
+      creatorId: req.body.UserId
     }
   }).then(function(group) {
-    // console.log('This is the group found or created /\n', group);
-    // if group was found --> send error message to User
     if (group[1] === false) {
       res.send(JSON.stringify('Group Already Exists!'));
     } else {
       models.UserGroup.create({
         UserId: req.body.UserId,
         GroupId: group[0].dataValues.id
-    // if no group was found, get id
       }).then(function(newGroup) {
         addOtherUsers(req.body.otherUsersArray, group[0].dataValues.id, req.body.creator);
-        // console.log('This is the association between user and group /\n', newGroup);
         res.send(JSON.stringify(newGroup.dataValues.GroupId));
       }).catch(function(err) {
         res.send(err);
@@ -344,7 +336,6 @@ router.get('/api/groups', function(req, res) {
       UserId: req.query.UserId
     }
   }).then(function(groups) {
-    console.log(groups);
     res.send(groups.map(function(group) {
       return group.dataValues.users;
     }));
@@ -370,7 +361,6 @@ router.delete('/api/groups', function(req, res) {
         UserId: req.query.UserId
       }
     }).then(function(groups) {
-      // console.log(groups);
       res.send(groups.map(function(group) {
         return group.dataValues.users;
       }));
@@ -402,20 +392,10 @@ router.get('/api/group', function(req, res) {
   });
 });
 
-// router.get('/api/scrape', function(req, res) {
-//   scraper(req.query.url, res);
-// });
-
 // To handle joining an existing Group
-router.post('/api/group', function(req, res) {
-  models.UserGroup.create({
-    UserId: req.body.userId,
-    GroupId: req.body.groupId
-  }).then(function(association) {
-    res.send(association);
-  }).catch(function(error) {
-    res.send(error);
-  });
+router.post('/api/groups/invite', function(req, res) {
+  addOtherUsers(req.body.otherUsersArray, req.body.GroupId, req.body.creator);
+  res.send('invites sent');
 });
 
 // To handle searching for users
@@ -430,7 +410,6 @@ router.get('/api/search/users', function(req, res) {
       }
     }
   }).then(function(users) {
-    console.log(users);
     res.send(users);
   }).catch(function(error) {
     res.send(error);
@@ -471,7 +450,6 @@ router.get('/api/invites', function(req, res) {
       UserId: req.query.user
     }
   }).then(function(associations) {
-    console.log(associations);
     res.send(associations);
   }).catch(function(error) {
     res.send(error);
@@ -553,7 +531,7 @@ router.get('/api/following/doc', function(req, res) {
     where: {
       UserId: req.query.UserId,
       source: req.query.source,
-      private: 'Public'
+      private: false
     },
     order: [['createdAt', 'ASC']]
   }).then(function(annotations) {
@@ -569,6 +547,9 @@ router.get('/api/groups/members', function(req, res) {
     include: [{
       model: models.User,
       as: 'groups'
+    }, {
+      model: models.Group,
+      as: 'users'
     }],
     where: {
       GroupId: req.query.GroupId
@@ -577,14 +558,20 @@ router.get('/api/groups/members', function(req, res) {
     var members = users.map(function(user) {
       return user.dataValues.groups.dataValues;
     });
-    res.send(members.sort(function(a, b) {
-      if (a.name.toUpperCase() < b.name.toUpperCase()) {
-        return -1;
-      } else if (a.name.toUpperCase() > b.name.toUpperCase()) {
-        return 1;
-      }
-      return 0;
-    }));
+    res.send({
+      groupName: users[0].dataValues.users.dataValues.name,
+      creator: members.filter(function(member) {
+        return member.id === users[0].dataValues.users.dataValues.creatorId;
+      })[0].name,
+      members: members.sort(function(a, b) {
+        if (a.name.toUpperCase() < b.name.toUpperCase()) {
+          return -1;
+        } else if (a.name.toUpperCase() > b.name.toUpperCase()) {
+          return 1;
+        }
+        return 0;
+      })
+    });
   }).catch(function(err) {
     res.send(err);
   });
@@ -600,7 +587,7 @@ router.get('/api/user', function(req, res) {
     }],
     where: {
       UserId: req.query.UserId,
-      private: 'Public'
+      private: false
     },
     order: [['updatedAt', 'DESC']]
   }).then(function(annotations) {

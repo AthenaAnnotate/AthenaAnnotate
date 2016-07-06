@@ -24,20 +24,22 @@ class App extends Component {
   }
 
   componentDidUpdate() {
-    this.props.actions.fetchAnnotations(
-      this.props.user.id,
-      this.props.filter,
-      this.props.group.selected,
-      this.props.following.selected
-    );
-    if (!this.props.following.loaded) {
-      this.props.actions.loadFollowingDB(this.props.user.id);
-    }
-    if (!this.props.group.loaded) {
-      this.props.actions.loadGroupsDB(this.props.user.id);
-    }
-    if (!this.props.invites.loaded) {
-      this.props.actions.updateInvites(this.props.user.id);
+    if (this.props.user.id) {
+      this.props.actions.fetchAnnotations(
+        this.props.user.id,
+        this.props.filter,
+        this.props.group.selected,
+        this.props.following.selected
+      );
+      if (!this.props.following.loaded) {
+        this.props.actions.loadFollowingDB(this.props.user.id);
+      }
+      if (!this.props.group.loaded) {
+        this.props.actions.loadGroupsDB(this.props.user.id);
+      }
+      if (!this.props.invites.loaded) {
+        this.props.actions.updateInvites(this.props.user.id);
+      }
     }
   }
 
@@ -101,7 +103,7 @@ App.propTypes = {
   actions: PropTypes.object,
   loading: PropTypes.bool.isRequired,
   filter: PropTypes.string,
-  profile: PropTypes.bool.isRequired,
+  profile: PropTypes.object.isRequired,
   following: PropTypes.object.isRequired,
   group: PropTypes.object.isRequired,
   invites: PropTypes.object.isRequired,
