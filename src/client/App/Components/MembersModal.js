@@ -2,23 +2,20 @@ import React, { PropTypes } from 'react';
 
 const membersModal = ({
   group,
-  showModal,
+  // showModal,
   search,
   selectUser,
   user,
   searchUsers,
   deselectUser,
   inviteUsers,
-  toggleRights,
+  // toggleRights,
 }) => {
   const members = group.info.members.map(member => (
     <li key={member.data.id}>
       <a>
         {member.data.name}
       </a>
-      <button onClick={() => toggleRights(member.data.id, group.selected, member.rights)}>
-        {member.rights ? 'REVOKE' : 'GRANT'}
-      </button>
     </li>
   ));
   const userList = search.users.map(u => (
@@ -37,42 +34,54 @@ const membersModal = ({
   ));
   return (
     <div>
-      <h4>Group Administrator</h4>
-      <span>{group.info.creator}</span>
-      <h4>Members</h4>
-      <ul>
+      <label>Members</label>
+      <ul className="search-results">
         {members}
       </ul>
-      <label htmlFor="addUsers">Add users to group</label>
-      <input
-        id="addUsers"
-        type="text"
-        placeholder="Enter a name"
-        onChange={(e) => searchUsers(e.target.value, user.id)}
-      />
-      {search.users.length === 0
-        ?
-        null
-        :
-        <ul>
-          {userList}
-        </ul>
-      }
       {search.selected.length === 0
         ?
         null
         :
         <div>
-          <div>Selected Users</div>
-          <ul>
+          <label>Invites</label>
+          <ul className="search-results">
             {selectedUserList}
           </ul>
-          <button onClick={() => inviteUsers(search.selected, group.selected, user.facebook.name)}>
+        </div>
+      }
+      <div className="createGroup-input">
+        <label htmlFor="addUsers">Add users to group</label>
+        <input
+          maxLength="200"
+          autoComplete="off"
+          aria-hidden="true"
+          id="addUsers"
+          type="text"
+          placeholder="Enter a name"
+          onChange={(e) => searchUsers(e.target.value, user.id)}
+        />
+        {search.users.length === 0
+          ?
+          null
+          :
+          <ul className="search-results">
+            {userList}
+          </ul>
+        }
+      </div>
+      {search.selected.length === 0
+        ?
+        null
+        :
+        <div>
+          <button
+            className="btn btn-success btn-xs invite"
+            onClick={() => inviteUsers(search.selected, group.selected, user.facebook.name)}
+          >
             Invite
           </button>
         </div>
       }
-      <button className="btn btn-default" onClick={() => showModal()}>Cancel</button>
     </div>
   );
 };
@@ -83,10 +92,23 @@ membersModal.propTypes = {
   selectUser: PropTypes.func.isRequired,
   searchUsers: PropTypes.func.isRequired,
   group: PropTypes.object.isRequired,
-  showModal: PropTypes.func.isRequired,
+  // showModal: PropTypes.func.isRequired,
   deselectUser: PropTypes.func.isRequired,
   inviteUsers: PropTypes.func.isRequired,
-  toggleRights: PropTypes.func.isRequired,
+  // toggleRights: PropTypes.func.isRequired,
 };
 
 export default membersModal;
+
+// <button className="btn btn-default" onClick={() => showModal()}>Cancel</button>
+      // <label>Group Administrator</label>
+      // <span>{group.info.creator}</span>
+      // <button onClick={() => toggleRights(member.data.id, group.selected, member.rights)}>
+      //   {member.rights ? 'REVOKE' : 'GRANT'}
+      // </button>
+// <button
+//   className="btn btn-success btn-xs invite"
+//   onClick={() => inviteUsers(search.selected, group.selected, user.facebook.name)}
+// >
+//   Invite
+// </button>
