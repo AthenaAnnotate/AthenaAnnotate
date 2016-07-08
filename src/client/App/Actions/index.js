@@ -62,7 +62,7 @@ export const deleteAnnotationFail = id => (
 
 export const deleteAnnotationDB = (id, url) => (
   dispatch =>
-    fetch(`${baseUrl}/api/annotations?id=${url}`, {
+    fetch(`${baseUrl}/api/annotations?id=${encodeURIComponent(url)}`, {
       method: 'DELETE',
     })
       .then(response => {

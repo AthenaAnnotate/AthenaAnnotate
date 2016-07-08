@@ -26,7 +26,7 @@ router.post('/api/create', function(req, res) {
       exact: req.body.target.selector.exact,
       prefix: req.body.target.selector.prefix,
       suffix: req.body.target.selector.suffix,
-      private: req.body.private,
+      private: false,
       type: req.body.type,
       groupId: req.body.groupId,
     }).then(function(note) {
@@ -58,7 +58,7 @@ router.get('/api/doc', function(req, res) {
     }],
     where: {
       UserId: req.query.UserId,
-      source: req.query.source,
+      source: decodeURIComponent(req.query.source),
     },
     order: [['createdAt', 'ASC']],
   }).then(function(annotations) {
@@ -97,7 +97,7 @@ router.put('/api/annotations', function(req, res) {
 // BOTH - deletes an annotation
 router.delete('/api/annotations', function(req, res) {
   models.Annotation.destroy({
-    where: { url: req.query.id },
+    where: { url: decodeURIComponent(req.query.id) },
   }).then(function() {
     res.send('deleted');
   }).catch(function() {
@@ -509,7 +509,7 @@ router.get('/api/group/doc', function(req, res) {
         UserId: {
           $in: userList,
         },
-        source: req.query.source,
+        source: decodeURIComponent(req.query.source),
         groupId: req.query.GroupId,
         // private: 'Public'
       },
@@ -534,7 +534,7 @@ router.get('/api/following/doc', function(req, res) {
     }],
     where: {
       UserId: req.query.UserId,
-      source: req.query.source,
+      source: decodeURIComponent(req.query.source),
       private: false,
     },
     order: [['createdAt', 'ASC']],
@@ -645,5 +645,25 @@ router.get('/api/user/profile', function(req, res) {
     res.send(user);
   }).catch(function(error) {
     res.send(error);
+  });
+});
+
+// Get a list of all public Annotations for a Doc
+router.get('/api/doc/public', function(req, res) {
+  models.Annotation.findAll({
+    include: [{
+      model: models.User,
+    }, {
+      model: models.Doc,
+    }],
+    where: {
+      source: decodeURIComponent(req.query.source),
+      private: false,
+    },
+    order: [['createdAt', 'ASC']],
+  }).then(function(annotations) {
+    annotationConstructor(annotations, res);
+  }).catch(function(err) {
+    res.send(err);
   });
 });

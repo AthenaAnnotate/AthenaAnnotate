@@ -10,12 +10,12 @@ var getDimensions = Promise.promisify(sizeOf);
 
 var updateDoc = function(imageUrl, originalLink) {
   models.Doc.update({
-    image: imageUrl
+    image: imageUrl,
   }, {
     where: {
-      url: originalLink
+      url: originalLink,
     },
-    returning: true
+    returning: true,
   }).then(function(doc) {
     console.log(doc);
   });
@@ -80,14 +80,15 @@ var getImages = function(doc, originalLink) {
 var getTitle = function(doc, originalLink) {
   var baseUrl = url.parse(originalLink).protocol + '//' + url.parse(originalLink).hostname;
   var title = doc('title');
+  console.log(title);
   models.Doc.update({
     title: title[0].children[0].data,
-    baseUrl: baseUrl
+    baseUrl: baseUrl,
   }, {
     where: {
-      url: originalLink
+      url: originalLink,
     },
-    returning: true
+    returning: true,
   }).then(function(entry) {
     console.log(entry);
   }).catch(function(error) {
@@ -99,7 +100,7 @@ var getHTML = function(link) {
   request({
     uri: link,
     jar: true,
-    maxRedirects: 20
+    maxRedirects: 20,
   }, function(error, response, body) {
     if (!error) {
       $ = cheerio.load(body);
