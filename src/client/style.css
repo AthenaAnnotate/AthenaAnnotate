@@ -383,20 +383,25 @@ button.create {
 }
 
 div.addUser {
-  background-color: grey;
-  border-radius: 500px;
-}
-
-div.addUser a {
-  display: none;
+  /*background-color: #eee;*/
+  /*border-radius: 500px;*/
   position: relative;
 }
 
-div.addUser:hover a{
-  display: block;
+div.addUser .remove {
+  display: none;
+  padding: 5px;
   position: absolute;
-  right: 5px;
+  text-decoration: none;
+  color: black;
+  top: 50%;
+  transform: translate(0, -50%);
+}
 
+div.addUser:hover .remove{
+  display: inline-block;
+  /*position: absolute;*/
+  /*right: 5px;*/
 }
 
 ul.nav-justified {
@@ -419,9 +424,10 @@ ul.nav-justified {
   border-bottom: none;
 }
 
-.userInfo {
-  position: relative;
+.UserInfo {
+  /*position: absolute;*/
   display: inline-block;
+  margin: 0 auto;
 }
 
 .docInfo {
@@ -430,7 +436,7 @@ ul.nav-justified {
 
 .userPageHeader {
   margin: 0 auto;
-  position: relative;
+  /*position: relative;*/
 }
 
 h4.name {
@@ -494,5 +500,9 @@ blockquote.bodyQ {
 }
 
 .AnnotationList {
+  padding-left: 0;
+}
+
+.inviteList, .search-results {
   padding-left: 0;
 }

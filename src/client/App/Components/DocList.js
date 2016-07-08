@@ -15,14 +15,14 @@ const DocList = ({ following, user, docs, onDocDelete, listView, switchView, fil
       ));
   return (
     <div className="col-md-9">
-      <button
+      <div
         type="button"
-        className="btn btn-default"
+        className="listview"
         aria-label="listView"
         onClick={() => switchView()}
       >
         <span className="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-      </button>
+      </div>
       {filter === 'User'
         ?
         <div className="userPageHeader">

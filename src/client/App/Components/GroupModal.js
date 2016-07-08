@@ -22,7 +22,7 @@ const createGroupModal = ({
     <li key={u}>
       <div className="addUser">
         <span>{u}</span>
-        <a onClick={() => deselectUser(u)}>x</a>
+        <span className="remove glyphicon glyphicon-remove-sign" onClick={() => deselectUser(u)} />
       </div>
     </li>
   ));
@@ -52,8 +52,8 @@ const createGroupModal = ({
           null
           :
           <div>
-            <div>Invites</div>
-            <ul>
+            <label>Invites</label>
+            <ul className="inviteList">
               {selectedUserList}
             </ul>
           </div>
@@ -73,7 +73,7 @@ const createGroupModal = ({
             ?
             null
             :
-            <ul>
+            <ul className="search-results">
               {userList}
             </ul>
           }
