@@ -38,6 +38,7 @@ div.avatar {
   box-sizing: border-box;
   border-radius: 2px;
   background-clip: padding-box;
+  background-color: rgba(241, 241, 241, 0.6);
 }
 
 li {
@@ -51,16 +52,20 @@ li.annotation{
   margin-bottom: 15px;
 }
 
-li blockquote {
-  font-size: 14px;
-  font-style: italic;
-  color: grey;
+blockquote.targetQ {
+  font-size: 1em;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  line-height: 1.42857143;
+  color: #333;
+  /*color: grey;*/
+  background-color: rgba(0, 149, 221, 0.15);
   margin-bottom: 0;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding: 10px;
   padding-left: 10px;
-  margin-left: 5px;
-  width: 95%;
+  padding-right: 40px;
+  width: 100%;
+  border-left: 2px solid rgba(0, 149, 221, 0.9);
+  position: relative;
 }
 
 li .username {
@@ -194,6 +199,7 @@ div.userPic {
   display: inline-block;
   width: 150px;
   height: 150px;
+  margin: 10px;
 }
 
 div.userPic-small {
@@ -204,7 +210,9 @@ div.userPic-small {
 }
 
 div.UserInfo .userProfile {
+  position: absolute;
   display: inline-block;
+  margin: 0 auto;
 }
 
 div.userTitle {
@@ -412,9 +420,79 @@ ul.nav-justified {
 }
 
 .userInfo {
+  position: relative;
   display: inline-block;
 }
 
 .docInfo {
   margin-bottom: 15px;
+}
+
+.userPageHeader {
+  margin: 0 auto;
+  position: relative;
+}
+
+h4.name {
+  margin-bottom: 3px;
+}
+
+.follow-btn {
+  display: block;
+}
+
+blockquote.bodyQ {
+  font-size: 1em;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  line-height: 1.42857143;
+  color: #333;
+  /*color: grey;*/
+  background-color: #fcf9eb;
+  margin-top: 5px;
+  margin-bottom: 0;
+  padding: 10px;
+  padding-left: 10px;
+  width: 100%;
+  border-left: 2px solid #f4b737;;
+  position: relative;
+}
+
+.target-btn {
+  position: absolute;
+  display: none;
+  right: 7px;
+  top: 50%;
+  transform: translate(0, -50%);
+}
+
+.targetQ:hover .target-btn{
+  display: block;  
+}
+
+.body-btn {
+  position: absolute;
+  display: none;
+  right: 7px;
+  top: 50%;
+  transform: translate(0, -50%);
+}
+
+.bodyQ:hover .body-btn{
+  display: block;
+}
+
+.edit-btn, .delete-btn {
+  display: inline-block;
+  margin-left: 3px;
+  cursor: pointer;
+}
+
+.card.annotation {
+  width: 90%;
+  margin: 5px auto;
+  padding: 20px;
+}
+
+.AnnotationList {
+  padding-left: 0;
 }

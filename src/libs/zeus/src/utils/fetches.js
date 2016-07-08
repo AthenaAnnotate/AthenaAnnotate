@@ -38,7 +38,7 @@ export const fetchChannels = (userId) => (
 );
 
 export const fetchAnnotes = (user) => { // TODO: change to fetchUserAnnotes, user to userId
-  const source = window.location.href;
+  const source = encodeURIComponent(window.location.href);
   const query = `${baseUrl}/api/doc?UserId=${user.id}&&source=${source}`;
 
   return fetch(query)
@@ -46,7 +46,7 @@ export const fetchAnnotes = (user) => { // TODO: change to fetchUserAnnotes, use
 };
 
 export const fetchGroupAnnotes = (groupId) => {
-  const source = window.location.href;
+  const source = encodeURIComponent(window.location.href);
   const query = `${baseUrl}/api/group/doc?GroupId=${groupId}&&source=${source}`;
 
   return fetch(query)
@@ -54,7 +54,7 @@ export const fetchGroupAnnotes = (groupId) => {
 };
 
 export const fetchDelete = (annoteId) => {
-  const query = `${baseUrl}/api/annotations?id=${annoteId}`;
+  const query = `${baseUrl}/api/annotations?id=${encodeURIComponent(annoteId)}`;
   // const query = options.API_DELETE + annoteId;
 
   return fetch(query, { method: 'DELETE' }).then(checkStatus);

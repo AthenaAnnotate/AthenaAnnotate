@@ -22,9 +22,11 @@ const Annotation = (
     // setFilter,
     setUserDB,
     userImage,
+    privacySetting,
+    groupSetting,
   }
 ) => (
-  <li className="object annotation">
+  <li className="card object annotation">
     {filter !== 'Self' && filter !== 'User' ?
       <div>
         <div
@@ -45,44 +47,44 @@ const Annotation = (
         </div>
       </div>
       : null}
-    <blockquote>
-      {target}
-    </blockquote>
+    <div className="target-box">
+      <blockquote className="targetQ">
+        {target}
+        <div className="target-btn">
+          {user.id !== userId ? null :
+            <div onClick={onAnnotationDelete}>
+              <span className="glyphicon glyphicon-trash" aria-hidden="true" />
+            </div>}
+        </div>
+      </blockquote>
+    </div>
     <div>
     {!!body ?
       <div>
-        {!edit ? body : null}
-        <div
-          className="card-action"
-        >
+        <blockquote className="bodyQ">
+          {!edit ? body : null}
+          {!edit && (user.id === userId) ?
+            <div className="body-btn">
+              <div className="edit-btn" onClick={() => onEditBody(id)}>
+                <span className="glyphicon glyphicon-pencil" />
+              </div>
+              <div className="delete-btn" onClick={() => onDeleteBody(id, url)}>
+                <span className="glyphicon glyphicon-trash" />
+              </div>
+            </div>
+            : null}
           {edit && (user.id === userId) ?
             <BodyEditor
               body={body}
               onCancel={() => onEditBody(id)}
               onSave={(txt, privacy, grp) => onSaveEdit(id, txt, privacy, grp, url)}
-              onDelete={() => onDeleteBody(id, url)}
+              privacySetting={privacySetting}
+              groupSetting={groupSetting}
             />
             : null}
-          {!edit && (user.id === userId) ?
-            <button
-              className="waves-effect waves-light btn-floating"
-              onClick={() => onEditBody(id)}
-            >
-              <i className="material-icons">mode_edit</i>
-            </button>
-            : null}
-        </div>
+        </blockquote>
       </div>
     : null}
-    </div>
-    <div className="buttons">
-      {user.id !== userId ? null :
-        <button
-          className="waves-effect waves-light btn-floating"
-          onClick={onAnnotationDelete}
-        >
-          <i className="material-icons">delete</i>
-        </button>}
     </div>
   </li>
 );
@@ -101,12 +103,14 @@ Annotation.propTypes = {
   userTitle: PropTypes.string.isRequired,
   userId: PropTypes.number.isRequired,
   filter: PropTypes.string.isRequired,
-  followUser: PropTypes.func.isRequired,
+  // followUser: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
-  following: PropTypes.object.isRequired,
-  setFilter: PropTypes.func.isRequired,
+  // following: PropTypes.object.isRequired,
+  // setFilter: PropTypes.func.isRequired,
   setUserDB: PropTypes.func.isRequired,
   userImage: PropTypes.string.isRequired,
+  privacySetting: PropTypes.string.isRequired,
+  groupSetting: PropTypes.number.isRequired,
 };
 
 export default Annotation;
@@ -117,3 +121,5 @@ export default Annotation;
 //     ? 'unfollow' : 'follow'}
 //   </a>
 // }
+
+// onDelete={() => onDeleteBody(id, url)}

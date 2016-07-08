@@ -25,30 +25,32 @@ const DocList = ({ following, user, docs, onDocDelete, listView, switchView, fil
       </button>
       {filter === 'User'
         ?
-        <div className="UserInfo">
-          <div
-            className="circle userPic"
-            style={{ backgroundImage: `url(${following.selected.picture})` }}
-            alt={following.selected.name}
-          />
-          <div className="userProfile">
-            <h4 className="name">{following.selected.name}</h4>
-            {following.selected.title !== undefined
-              ?
-              <span className="title">{following.selected.title}</span>
-              :
-              null
-            }
-            <button
-              className={following.users.filter(followedUser =>
-                followedUser.id === following.selected.id).length !== 0
-            ? 'btn btn-danger' : 'btn btn-success'}
-              onClick={() => followUser(following.selected.id, user.id)}
-            >
-              {following.users.filter(followedUser =>
-                followedUser.id === following.selected.id).length !== 0
-            ? 'UNFOLLOW' : 'FOLLOW'}
-            </button>
+        <div className="userPageHeader">
+          <div className="UserInfo">
+            <div
+              className="circle userPic"
+              style={{ backgroundImage: `url(${following.selected.picture})` }}
+              alt={following.selected.name}
+            />
+            <div className="userProfile">
+              <h4 className="name">{following.selected.name}</h4>
+              {following.selected.title !== undefined
+                ?
+                <span className="title">{following.selected.title}</span>
+                :
+                null
+              }
+              <button
+                className={following.users.filter(followedUser =>
+                  followedUser.id === following.selected.id).length !== 0
+              ? 'btn btn-danger follow-btn' : 'btn btn-success follow-btn'}
+                onClick={() => followUser(following.selected.id, user.id)}
+              >
+                {following.users.filter(followedUser =>
+                  followedUser.id === following.selected.id).length !== 0
+              ? 'UNFOLLOW' : 'FOLLOW'}
+              </button>
+            </div>
           </div>
         </div>
         :
