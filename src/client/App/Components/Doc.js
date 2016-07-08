@@ -1,10 +1,6 @@
 import React, { PropTypes } from 'react';
 import VisibleAnnotationList from '../Containers/VisibleAnnotationList';
 
-// const changeLocation = (url) => {
-//   window.location = url;
-// };
-
 const Doc = ({
   user,
   url,
@@ -24,19 +20,21 @@ const Doc = ({
     <li className="object doc">
       {listView
         ?
-        <div className="media card" onClick={() => { window.location = url; }}>
-          <a>
-            <div className="media-left">
-              <img
-                className="media-object docimage small"
-                src={image !== null ? image : placeholder}
-                alt="Thumbnail"
-              />
-            </div>
-            <div className="media-body">
-              <h4 className="media-heading">{title}</h4>
-              <p className="url">{baseUrl}</p>
-              <span className="note-count">Annotations: {count}</span>
+        <div className="media card">
+          <a href={url} target="_blank">
+            <div>
+              <div className="media-left">
+                <img
+                  className="media-object docimage small"
+                  src={image !== null ? image : placeholder}
+                  alt="Thumbnail"
+                />
+              </div>
+              <div className="media-body">
+                <h4 className="media-heading">{title}</h4>
+                <p className="url">{baseUrl}</p>
+                <span className="note-count">Annotations: {count}</span>
+              </div>
             </div>
           </a>
           {filter !== 'Self'
@@ -50,8 +48,8 @@ const Doc = ({
         </div>
         :
         <div className="detail card">
-          <div className="docInfo"  onClick={() => { window.location = url; }}>
-            <a className="docInfo"/* changeLocation(url)*/>
+          <a href={url} target="_blank">
+            <div className="docInfo">
               <div className="image">
                 <img
                   className="docimage large"
@@ -63,8 +61,8 @@ const Doc = ({
                 <h4>{title}</h4>
                 <p className="url">{baseUrl}</p>
               </div>
-            </a>
-          </div>
+            </div>
+          </a>
           {filter !== 'Self'
             ?
             null

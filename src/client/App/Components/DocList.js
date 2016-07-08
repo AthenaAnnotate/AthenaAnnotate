@@ -12,17 +12,13 @@ const DocList = ({ following, user, docs, onDocDelete, listView, switchView, fil
       filter={filter}
       updateDocPrivacy={updateDocPrivacy}
     />
-      ));
+  ));
+  // const groupName = group.groups.filter(grp =>
+  //   grp.id === group.selected
+  //   )[0];
+  // const currGroup = groupName.name;
   return (
     <div className="col-md-9">
-      <div
-        type="button"
-        className="listview"
-        aria-label="listView"
-        onClick={() => switchView()}
-      >
-        <span className="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-      </div>
       {filter === 'User'
         ?
         <div className="userPageHeader">
@@ -58,13 +54,24 @@ const DocList = ({ following, user, docs, onDocDelete, listView, switchView, fil
       }
       {filter === 'Groups'
         ?
-        <a
-          onClick={() => showMembers(group.selected)}
-        >
-          Members
-        </a>
+        <div className="userPageHeader">
+          <div className="UserInfo">
+
+            <a onClick={() => showMembers(group.selected)}>
+              Members
+            </a>
+          </div>
+        </div>
         : null
       }
+      <div
+        type="button"
+        className="listview"
+        aria-label="listView"
+        onClick={() => switchView()}
+      >
+        <span className="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+      </div>
       <ul className="list-group">
         {docList}
       </ul>
@@ -87,3 +94,5 @@ DocList.propTypes = {
 };
 
 export default DocList;
+
+// <h3 className="group-title">{currGroup}</h3>

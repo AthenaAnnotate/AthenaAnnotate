@@ -80,7 +80,7 @@ const createGroupModal = ({
         </div>
       </form>
       <button
-        className="btn btn-default btn-success create"
+        className="btn btn-default btn-success btn-xs create"
         onClick={() => {
           createGroup(group.edit, user.id, user.facebook.name, search.selected);
           showModal();
