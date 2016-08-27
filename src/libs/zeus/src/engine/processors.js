@@ -137,8 +137,7 @@ export const locateAnnote = (annote, docText, nodes) => {
           break;
         }
 
-        startNode.startOffset =
-        matchIdx - startNode.start; // + selector.prefix.length;
+        startNode.startOffset = matchIdx - startNode.start; // + selector.prefix.length;
         // IF match spans multiple nodes find the endNode
         // ELSE, endNode is the same node as startNode
 

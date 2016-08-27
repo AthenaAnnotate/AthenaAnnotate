@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Naive Article Layout</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
 <body>
   <style>
@@ -14,13 +15,37 @@
       padding-top: 30px;
     }
 
+    .container {
+      margin-right: 20%;
+    }
+
+    .well {
+      width: 60%;
+      margin: 0 auto;
+    }
+
+    .directions {
+      text-align: center;
+      padding: 0;
+      font-weight: bold;
+    }
+
   </style>
-  <div>
+  <div class="container">
+    <div class="well well-sm">
+      <div class="directions">
+      Start by selecting some text.
+      <br>
+      Click on an annotation you make.
+      <br>
+      Made with React, Redux, and vanilla Javascript
+      </div>
+    </div>
     <p class='p1'>
-      Lorem ipsum <span style="font-weight: bold;">dolor sit amet</span>, consectetur adipiscing elit. Morbi sed dignissim nulla, non hendrerit sem. Ut sed hendrerit mauris. Donec venenatis urna in dui pellentesque molestie. Phasellus posuere eleifend dui, vel sagittis lectus pulvinar finibus. In quam ex, cursus sed urna fringilla, malesuada iaculis ante. Sed ut mauris eget tellus tempus imperdiet eu ac massa. Suspendisse faucibus nibh eget quam vestibulum rhoncus. Nam ut faucibus urna. <span style="font-weight: bold;">In vitae tempor purus.</span>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sed dignissim nulla, non hendrerit sem. Ut sed hendrerit mauris. Donec venenatis urna in dui pellentesque molestie. Phasellus posuere eleifend dui, vel sagittis lectus pulvinar finibus. In quam ex, cursus sed urna fringilla, malesuada iaculis ante. Sed ut mauris eget tellus tempus imperdiet eu ac massa. Suspendisse faucibus nibh eget quam vestibulum rhoncus. Nam ut faucibus urna. In vitae tempor purus.
     </p>
     <p class='p2'>
-      Curabitur congue ultrices magna, nec dignissim velit imperdiet eget. Vivamus non dignissim felis. Vivamus eget consequat est. Ut malesuada varius metus vel accumsan. Maecenas eget sem sed tortor imperdiet ornare vel nec nibh. Maecenas nulla eros, facilisis sed est non, blandit imperdiet ligula. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Pellentesque ultrices vitae est vel feugiat. In vitae purus ultricies mauris gravida ornare at quis nisi.Sed consectetur sollicitudin vulputate. <span style="font-weight: bold;">Phasellus id ex commodo</span>, gravida eros vitae, sagittis tellus. Sed tincidunt eros vitae convallis pretium. Phasellus massa magna, consequat in mauris id, interdum aliquam elit. Quisque vel ligula in metus vestibulum auctor eu quis elit. Integer elit justo, lobortis a tristique eu, sagittis sed magna. Pellentesque lectus tortor, lobortis non aliquet eu, pretium et nunc. Phasellus vel rutrum est, aliquet cursus orci. In sodales orci id lobortis imperdiet. Vestibulum tincidunt magna vel gravida dignissim.
+      Curabitur congue ultrices magna, nec dignissim velit imperdiet eget. Vivamus non dignissim felis. Vivamus eget consequat est. Ut malesuada varius metus vel accumsan. Maecenas eget sem sed tortor imperdiet ornare vel nec nibh. Maecenas nulla eros, facilisis sed est non, blandit imperdiet ligula. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Pellentesque ultrices vitae est vel feugiat. In vitae purus ultricies mauris gravida ornare at quis nisi.Sed consectetur sollicitudin vulputate. Phasellus id ex commodo, gravida eros vitae, sagittis tellus. Sed tincidunt eros vitae convallis pretium. Phasellus massa magna, consequat in mauris id, interdum aliquam elit. Quisque vel ligula in metus vestibulum auctor eu quis elit. Integer elit justo, lobortis a tristique eu, sagittis sed magna. Pellentesque lectus tortor, lobortis non aliquet eu, pretium et nunc. Phasellus vel rutrum est, aliquet cursus orci. In sodales orci id lobortis imperdiet. Vestibulum tincidunt magna vel gravida dignissim.
     </p>
     <p class='p3'>
       Etiam nec dolor dui. Aenean lobortis tortor nisi, eget hendrerit turpis tempor ac. In hac habitasse platea dictumst. Donec arcu eros, consectetur at vehicula nec, venenatis a lacus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla tortor diam, auctor eget lectus vel, bibendum tincidunt sapien. Etiam egestas pharetra purus ut efficitur. Sed volutpat nibh augue, nec efficitur dui vulputate eget. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis sollicitudin, urna et luctus ullamcorper, neque urna efficitur neque, eget imperdiet arcu purus pharetra nunc.
@@ -62,6 +87,23 @@
       Donec luctus blandit finibus. Curabitur vitae congue ex. Vestibulum eu mi metus. Pellentesque mi odio, sollicitudin eget velit ut, rhoncus finibus mauris. Etiam nec ullamcorper erat, vitae viverra risus. Quisque suscipit ligula non dictum aliquet. Integer augue urna, sagittis eu malesuada in, faucibus non ex. Pellentesque mollis odio sit amet dignissim sodales. Morbi quis condimentum mi. In eget condimentum
     </p>
   </div>
+  <script>
+  const loadApp = function() {
 
+    const req = new XMLHttpRequest();
+
+    req.open('GET', `https://localhost:3000/zeus/zeus.js`);
+    req.onload = function() {
+      const script = document.createElement('script');
+      script.textContent = req.responseText;
+      (document.head || document.documentElement).appendChild(script);
+    };
+    req.onerror = function() {
+      console.log('AthenaAnnotate extension cannot fetch zeus!');
+    };
+    req.send();
+  };
+  loadApp();
+  </script>
 </body>
 </html>

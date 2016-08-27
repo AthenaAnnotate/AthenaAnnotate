@@ -80,24 +80,42 @@ export const getText = () => {
 
   const prefix = range.startContainer
                 .textContent
-                .substring(
-                startOffset - 20,
-                startOffset
-                );
+                .substring(startOffset - 20, startOffset);
 
   const suffix = range.endContainer
                 .textContent
-                .substring(
-                  endOffset,
-                  endOffset + 20
-                );
+                .substring(endOffset, endOffset + 20);
 
+  return { range, selector: { exact, prefix, suffix } };
+};
+
+export const createAnnote = (selector, type, annoteId, userId) => {
+  const url = window.location.href;
+  // TODO: do not use annotations.length to determine
+  // annotation id, will be problematic in event of an
+  // annotation deletion
+
+  // TODO: add '/' before annoteId if target.souce
+  // does not end w/ a '/'
+  const id = `${url}/annote${annoteId}/${userId}`;
   return {
-    range,
-    selector: {
-      exact,
-      prefix,
-      suffix,
+    id,
+    type,
+    creator: userId,
+    body: {
+      lastModified: '',
+      text: '',
+    },
+    target: {
+      source: url,
+      selector,
     },
   };
+};
+
+export const getAnnoteId = idString => {
+  const endIdx = idString.lastIndexOf('/');
+  const startIdx = idString.substring(0, endIdx)
+                   .lastIndexOf('e') + 1;
+  return parseInt(idString.substring(startIdx, endIdx), 10) + 1;
 };

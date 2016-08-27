@@ -284,6 +284,16 @@ div.userTitle {
   opacity: .8;
 }
 
+.demo {
+  color: black;
+  background-color: #00B4DD;
+}
+
+.demo:hover {
+  color: black;
+  opacity: .8;
+}
+
 .row {
   margin-bottom: 6em;
 }

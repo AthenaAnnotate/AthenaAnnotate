@@ -17,20 +17,12 @@ const parseDoc = doc => {
   node = nodeIterator.nextNode();
   while (!!node) {
     // create node object
-    nodes.push(
-      {
-        textNode: node,
-        start: docText.length,
-      }
-    );
+    nodes.push({ textNode: node, start: docText.length });
     // concat to allText
     docText += node.nodeValue;
     node = nodeIterator.nextNode();
   }
-  return {
-    docText,
-    nodes,
-  };
+  return { docText, nodes };
 };
 
 export default parseDoc;
